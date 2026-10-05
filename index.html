@@ -7434,7 +7434,8 @@ function showLTab(n){
 function goBack(){showView(prevView);}
 
 function buildGloss(){
-  document.getElementById('gloss-grid').innerHTML=GLOSSARY.map(g=>`<div class="gi" data-t="${g.t.toLowerCase()}"><div class="term">${g.t}</div><div class="def">${g.d}</div></div>`).join('');
+  const grid=document.getElementById('gloss-grid');if(!grid)return;
+  grid.innerHTML=GLOSSARY.map(g=>`<div class="gi" data-t="${g.t.toLowerCase()}"><div class="term">${g.t}</div><div class="def">${g.d}</div></div>`).join('');
 }
 
 function filterGloss(q){
@@ -8272,7 +8273,7 @@ saa2Slides.forEach((s,i) => {
   const d = document.createElement('div');
   d.className = 'saa2-vthumb' + (i===0?' saa2-vt-active':'');
   d.onclick = () => saa2ViewerGo(i);
-  d.innerHTML = '<img class="saa2-vthumb-img" src="slides/slide-'+pad+'.jpg" onerror="this.style.opacity='0.2'" alt="S'+s.num+'"><div class="saa2-vthumb-num">'+String(s.num).padStart(2,'0')+'</div>';
+  d.innerHTML = '<img class="saa2-vthumb-img" src="slides/slide-'+pad+'.jpg" onerror="this.style.opacity=\'0.2\'" alt="S'+s.num+'"><div class="saa2-vthumb-num">'+String(s.num).padStart(2,'0')+'</div>';
   strip.appendChild(d);
 });
 
