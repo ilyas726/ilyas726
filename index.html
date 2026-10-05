@@ -7350,6 +7350,84 @@ const GLOSSARY=[
   {t:'NIST SP 800-61',d:'NIST Computer Security Incident Handling Guide — industry-standard 4-phase IR framework.'},
 ];
 
+// Shown under each quiz question after submitting, in the same order as MODULES[].quiz
+const QUIZ_EXPLANATIONS={
+  nessus:[
+    'CVSS = Common Vulnerability Scoring System, the open standard (maintained by FIRST) that rates a vulnerability from 0.0 to 10.0. Nessus shows a CVSS score for every finding so you can prioritize.',
+    'Log4Shell (CVE-2021-44228) in the Log4j logging library scored the maximum 10.0: remote code execution with no authentication, in a library embedded almost everywhere. Mass exploitation started within hours of disclosure.',
+    '9.5 falls in the Critical band (9.0–10.0) of the severity table in the Theory tab, so the target is to patch within 24–48 hours.',
+    'With credentials, Nessus logs in to the target and reads installed software, patch levels and local settings. From outside it only sees open ports and banners. It is not faster, and it still requires written authorization.'
+  ],
+  splunk:[
+    'SIEM = Security Information and Event Management: it collects logs from many sources, normalizes them and correlates events to raise alerts.',
+    'Adaptive Response lets a Splunk alert trigger an action automatically, for example asking FortiGate to block the attacking IP, instead of waiting for an analyst.',
+    'The Universal Forwarder is a lightweight agent installed on servers and endpoints. It only ships logs to the Splunk indexer; searching and dashboards happen on the Splunk server.',
+    'UEBA = User and Entity Behavior Analytics: it learns what "normal" looks like for each user or host and alerts on deviations, such as a login at 3 a.m. from a new country.'
+  ],
+  fortigate:[
+    'DPI = Deep Packet Inspection: the firewall looks inside the packet payload (application, content, signatures), not just the IP addresses and ports in the header.',
+    'Deny-all (implicit deny) blocks everything by default; only traffic matched by an explicit allow rule passes. It is the least-privilege principle applied to the network.',
+    'Inter-zone logs are the evidence a SIEM such as Splunk needs to correlate events and spot lateral movement between segments. Logging does not improve performance; it costs a little.',
+    'Adaptive Response is the automation loop: Splunk detects, FortiGate blocks the source IP. It does not replace Splunk, scan for vulnerabilities or monitor endpoint memory.'
+  ],
+  wireshark:[
+    'SMB (file sharing on Windows) runs over TCP 445. For comparison: 80 = HTTP, 443 = HTTPS, 3389 = RDP.',
+    'A BPF (Berkeley Packet Filter) expression such as "tcp port 445" limits a capture to the traffic you care about. Wireshark only observes traffic; it never blocks it.',
+    'Port 443 is open almost everywhere and its traffic is encrypted, so command-and-control (C2) traffic hides among normal HTTPS browsing. Wireshark can still capture it; it just cannot read the encrypted content.',
+    'Normal DNS names are short. Very long queries can be DNS tunnelling: stolen data encoded (often in base64) into subdomain names and sent out through DNS.'
+  ],
+  metasploit:[
+    'A penetration test simulates a real attacker against systems you are authorized to test, to prove which weaknesses can actually be exploited. It complements vulnerability scanning; it does not replace it.',
+    'Mimikatz dumps credentials from LSASS memory, which is MITRE ATT&CK T1003 (OS Credential Dumping). T1190 = Exploit Public-Facing Application, T1078 = Valid Accounts, T1567 = Exfiltration Over Web Service.',
+    'Without written authorization from the system owner, running exploits is illegal, even for training. In this course, only attack the VMs in your own isolated lab.',
+    'The order is reconnaissance → vulnerability scanning → exploit selection → exploitation → post-exploitation (privilege escalation, credential dumping, persistence) → reporting.'
+  ],
+  wazuh:[
+    'FIM = File Integrity Monitoring: Wazuh records hashes of important files and alerts when one is created, modified or deleted.',
+    'Wazuh is open source. Its agents watch each endpoint directly (files, processes, logs), while Splunk mainly centralizes and correlates logs sent to it. The two are often used together.',
+    'Active Response runs a script on the agent, for example adding a host-firewall rule that blocks the IP behind the brute-force attempts.',
+    'Ransomware encrypts many files in a short time. That burst of file changes is exactly what FIM detects, often before other signals appear.'
+  ],
+  openvas:[
+    'NVT = Network Vulnerability Test: one test script in OpenVAS that checks for a specific vulnerability. The feed contains over 100,000 of them.',
+    'Two independent scanners flagging the same CVE greatly increases confidence that the finding is real, which helps eliminate false positives and prioritize remediation.',
+    'Greenbone Community Edition is the free, open-source distribution of GVM (Greenbone Vulnerability Management), which includes the OpenVAS scanner.',
+    '"Full and Fast" runs the full set of NVTs while skipping tests that do not apply to the services detected, giving the best coverage for a reasonable scan time.'
+  ],
+  incident:[
+    'NIST SP 800-61 (Computer Security Incident Handling Guide) defines the 4 phases: Preparation; Detection & Analysis; Containment, Eradication & Recovery; Post-Incident Activity.',
+    'Careful: 72 hours is the GDPR (European Union) deadline. In Canada, PIPEDA and Québec\'s Loi 25 require notification "as soon as feasible" (with diligence) once there is a real risk of significant harm, without a fixed number of hours.',
+    'Using SMB to move between machines is MITRE ATT&CK T1021.002 (Remote Services: SMB/Windows Admin Shares). T1003 = Credential Dumping, T1190 = Exploit Public-Facing Application.',
+    'Once the threat is contained, eradication removes the root cause, here by patching the exploited vulnerability, so the attacker cannot simply come back. The post-mortem comes last.'
+  ],
+  'fortigate-advanced':[
+    'DPI = Deep Packet Inspection: the firewall analyses the content of packets (applications, signatures), not only the source/destination addresses and ports.',
+    'With an implicit deny-all policy, nothing passes unless a rule explicitly allows it. Every allowed flow must be justified: least privilege at the network level.',
+    'In Monitor mode the IPS only raises alerts and the attack still reaches its target. Block mode drops the malicious packets inline.',
+    'The Security Fabric connects FortiGate with FortiAnalyzer (logs), FortiManager (central configuration) and third-party tools such as Splunk, so they share information and respond together.'
+  ],
+  fortianalyzer:[
+    'FortiAnalyzer collects and stores logs from all FortiGate devices in one place, giving the SOC a single view for searching, reporting and threat hunting. It does not replace the firewall.',
+    'IOC = Indicator of Compromise: evidence that a system may be compromised, such as a known malicious IP, domain or file hash.',
+    'FortiAnalyzer ships report templates for several frameworks (PCI-DSS, HIPAA, ISO 27001, SOX, GDPR), not just one.',
+    'A single event rarely proves a breach. Correlating events across log types and devices over time (e.g. IPS alert → new outbound connection → large upload) reveals the attack chain.'
+  ],
+  risk:[
+    'In the Government of Canada scheme, Protected A = injury, Protected B = serious injury, Protected C = extremely grave injury to an individual or organization if the information is compromised.',
+    'In a 5×5 matrix, Risk = Impact × Likelihood, giving a score from 1 to 25. Multiplying makes a risk that is both likely and severe stand out clearly.',
+    'RA-5 (Vulnerability Monitoring and Scanning) belongs to the RA (Risk Assessment) family. AC = Access Control, AU = Audit and Accountability, IR = Incident Response.',
+    'Residual risk is what remains after controls are applied. Inherent risk is the level before any control.'
+  ],
+  riskassessment:[
+    'High Water Mark: the overall category takes the highest of the C, I and A values. Averaging would under-protect the most sensitive property.',
+    'In the GC context, a HIGH confidentiality impact corresponds to the most sensitive levels: Protected C, or classified (Secret).',
+    'The SCAR (Security Categorization Assessment Report) is the formal deliverable of the categorization process. SAR, SSP and POA&M come later in SA&A.',
+    'The Intrinsic Business Priority (IBP) is rated on a scale from 1 to 5.',
+    'The Asset Valuation Table follows HTRA (Harmonized TRA) Annex B, the asset identification and valuation phase used by the Government of Canada.',
+    'C = HIGH and I = HIGH, A = LOW. By High Water Mark the highest value wins, so the system is HIGH. Averaging or using the lowest value would under-protect it.'
+  ]
+};
+
 let curMod=null,prevView='home',qAns={},startTime=Date.now();
 let done=new Set(),scores=[],labs=new Set();
 
@@ -7398,7 +7476,7 @@ function markLab(id){labs.add(id);saveProgress();updateProg();}
 
 function buildQuiz(id){
   const m=MODULES.find(x=>x.id===id);qAns={};
-  let h=m.quiz.map((q,qi)=>`<div class="quiz-q"><div class="q-text">${qi+1}. ${q.q}</div><div class="quiz-opts">${q.opts.map((o,oi)=>`<button class="q-opt" id="o-${qi}-${oi}" onclick="pick(${qi},${oi},${q.ans})"><i class="ti ti-circle"></i> ${o}</button>`).join('')}</div></div>`).join('');
+  let h=m.quiz.map((q,qi)=>`<div class="quiz-q"><div class="q-text">${qi+1}. ${q.q}</div><div class="quiz-opts">${q.opts.map((o,oi)=>`<button class="q-opt" id="o-${qi}-${oi}" onclick="pick(${qi},${oi},${q.ans})"><i class="ti ti-circle"></i> ${o}</button>`).join('')}</div><div class="info-box" id="qe-${qi}" style="display:none"></div></div>`).join('');
   h+=`<button class="sub-btn" onclick="submit('${id}')"><i class="ti ti-check-circle"></i> Submit answers</button><div id="qr-${id}" style="display:none" class="quiz-result"></div>`;
   document.getElementById('ltab-quiz').innerHTML=h;
 }
@@ -7417,9 +7495,15 @@ function submit(id){
     if(ch===q.ans)s++;
     m.quiz[qi].opts.forEach((_,oi)=>{
       const b=document.getElementById(`o-${qi}-${oi}`);if(!b)return;
+      b.style.background='';b.style.borderColor='';b.style.color='';
       if(oi===q.ans){b.className='q-opt correct';b.querySelector('i').className='ti ti-check';}
       else if(oi===ch&&ch!==q.ans){b.className='q-opt wrong';b.querySelector('i').className='ti ti-x';}
     });
+  });
+  const exps=QUIZ_EXPLANATIONS[id]||[];
+  m.quiz.forEach((_,qi)=>{
+    const e=document.getElementById(`qe-${qi}`);
+    if(e&&exps[qi]){e.textContent=exps[qi];e.style.display='block';}
   });
   const pct=Math.round((s/m.quiz.length)*100);
   const r=document.getElementById(`qr-${id}`);r.style.display='block';
