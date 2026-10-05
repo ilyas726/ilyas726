@@ -3465,7 +3465,7 @@ function svScrollTo(id){
         <div class="ind-threat-item"><div class="ind-threat-dot" style="background:#22c55e"></div>MFA on all clinical applications and remote access</div>
         <div class="ind-threat-item"><div class="ind-threat-dot" style="background:#22c55e"></div>Immutable backups tested weekly with recovery drills</div>
         <div class="ind-threat-item"><div class="ind-threat-dot" style="background:#22c55e"></div>Privileged Access Management (PAM) for admin accounts</div>
-        <div class="ind-threat-item"><div class="ind-threat-dot" style="background:#22c55e"></div>HIPAA breach notification within 72 hours (Loi 25)</div>
+        <div class="ind-threat-item"><div class="ind-threat-dot" style="background:#22c55e"></div>Breach notification: Loi 25 — promptly, to the CAI and patients · HIPAA (US) — within 60 days</div>
         <div class="ind-threat-item"><div class="ind-threat-dot" style="background:#22c55e"></div>Security awareness training for all clinical staff</div>
       </div>
     </div>
@@ -3554,7 +3554,7 @@ function svScrollTo(id){
         <div class="ind-threat-item"><div class="ind-threat-dot" style="background:#22c55e"></div>Segmented guest vs. academic WiFi networks</div>
         <div class="ind-threat-item"><div class="ind-threat-dot" style="background:#22c55e"></div>Data minimization — collect only necessary PII</div>
         <div class="ind-threat-item"><div class="ind-threat-dot" style="background:#22c55e"></div>Security awareness training for all students and staff</div>
-        <div class="ind-threat-item"><div class="ind-threat-dot" style="background:#22c55e"></div>Loi 25 breach notification within 72 hours (Québec)</div>
+        <div class="ind-threat-item"><div class="ind-threat-dot" style="background:#22c55e"></div>Loi 25 breach notification: promptly, to the CAI and the people affected (Québec)</div>
         <div class="ind-threat-item"><div class="ind-threat-dot" style="background:#22c55e"></div>BYOD policy with endpoint compliance checks</div>
       </div>
     </div>
@@ -5795,7 +5795,7 @@ function instTab(el, panelId) {
           <div class="ra-class-label" style="color:#eab308">🟡 Protected B</div>
           <div class="ra-class-injury" style="color:#eab308">Serious injury to individuals if disclosed</div>
           <div class="ra-class-example">Medical records · SIN numbers · Financial data · PII · Law enforcement records · Tax information · Benefits data</div>
-          <div style="margin-top:10px;font-size:12px;font-family:var(--font-mono);color:var(--text3)">Impact score: 3–4 · Breach SLA: 72 hours (Loi 25)</div>
+          <div style="margin-top:10px;font-size:12px;font-family:var(--font-mono);color:var(--text3)">Impact score: 3–4 · Breach reporting: as soon as feasible (PIPEDA / Loi 25)</div>
         </div>
         <div class="ra-class-card" style="background:rgba(249,115,22,0.05);border-color:rgba(249,115,22,0.3)">
           <div style="position:absolute;top:0;left:0;right:0;height:3px;background:#f97316"></div>
@@ -5856,7 +5856,7 @@ function instTab(el, panelId) {
         </table>
       </div>
       <div class="ra-info" style="margin-top:1rem"><i class="ti ti-info-circle"></i> <strong>CIA Triad Priority:</strong> Each asset should have a primary CIA priority — Confidentiality (data must not be disclosed), Integrity (data must not be modified), or Availability (system must remain operational). This influences which controls are most important for that asset.</div>
-      <div class="ra-warn"><i class="ti ti-alert-triangle"></i> All assets must be classified before risk scoring begins. The classification level directly determines the Impact score in your risk matrix — a Protected B asset with High impact requires faster remediation SLAs and may trigger mandatory breach reporting under PIPEDA or Loi 25 within 72 hours.</div>
+      <div class="ra-warn"><i class="ti ti-alert-triangle"></i> All assets must be classified before risk scoring begins. The classification level directly determines the Impact score in your risk matrix — a Protected B asset with High impact requires faster remediation SLAs and may trigger mandatory breach reporting under PIPEDA or Loi 25, as soon as feasible after the breach is confirmed.</div>
     </div>
 
     <!-- ====== THREAT REGISTER ====== -->
@@ -6283,7 +6283,7 @@ function instTab(el, panelId) {
             <div class="ra-control-impl">
               <strong style="color:var(--text)">IR-4:</strong> Implement NIST SP 800-61 4-phase IR process — Detection, Containment, Eradication, Recovery. Documented playbooks per incident type.<br>
               <strong style="color:var(--text)">IR-5:</strong> Track and document incidents. SIEM (Splunk) + case management (TheHive) for full incident lifecycle tracking.<br>
-              <strong style="color:var(--text)">IR-6:</strong> Report incidents to senior management and authorities as required. Breach notification: PIPEDA / Loi 25 = 72 hours. US HIPAA = 60 days.<br>
+              <strong style="color:var(--text)">IR-6:</strong> Report incidents to senior management and authorities as required. Breach notification: PIPEDA = as soon as feasible · Loi 25 = promptly ("avec diligence") · GDPR = 72 hours · US HIPAA = within 60 days.<br>
               <strong style="color:var(--text)">IR-8:</strong> Maintain a tested, current IR plan. Tabletop exercises at least annually. Plan reviewed after every significant incident.
             </div>
           </div>
