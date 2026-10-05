@@ -7693,17 +7693,18 @@ function updateSiteStats(){
   set('stat-questions',MODULES.reduce((n,m)=>n+m.quiz.length,0));
 }
 
-function openLesson(id){
+function openLesson(id,fromHistory){
   const mod=MODULES.find(m=>m.id===id);
   if(!mod)return;
   curMod=mod;
-  prevView=document.querySelector('.view.active').id.replace('view-','');
+  const cur=document.querySelector('.view.active').id.replace('view-','');
+  if(cur!=='lesson')prevView=cur;
   document.getElementById('lesson-title').textContent=curMod.title;
   document.getElementById('lesson-badge').textContent=curMod.level;
   document.getElementById('ltab-theory').innerHTML=curMod.theory;
   const legal=OFFENSIVE_MODULES.includes(id)?`<div class="warn-box" role="note"><strong>Legal &amp; safety:</strong> only attack the virtual machines in your own isolated lab, or systems you have <strong>written authorization</strong> to test. Anything else is illegal in Canada (Criminal Code, s. 342.1 and 430), even for practice.</div>`:'';
   document.getElementById('ltab-lab').innerHTML=legal+curMod.lab+`<div style="margin-top:1.25rem"><button class="sub-btn" onclick="markLab('${id}')"><i class="ti ti-check"></i> Mark lab complete</button></div>`;
-  buildQuiz(id);showLTab('theory');showView('lesson');
+  buildQuiz(id);showLTab('theory');showView('lesson',fromHistory);
 }
 
 function markLab(id){labs.add(id);saveProgress();updateProg();}
@@ -7754,9 +7755,38 @@ function updateProg(){
   document.getElementById('prog-time').textContent=Math.round((Date.now()-startTime)/60000)+'m';
 }
 
-function showView(n){
+// Each page has its own address (#/glossary, #/lesson/nessus) so it can be shared and the Back button works
+function setRoute(n){
+  const h='#/'+(n==='lesson'&&curMod?'lesson/'+curMod.id:n);
+  if(location.hash!==h)history.pushState(null,'',h);
+}
+function routeFromHash(){
+  const m=location.hash.match(/^#\/([\w-]+)(?:\/([\w-]+))?/);
+  if(m&&m[1]==='lesson'&&m[2]&&MODULES.some(x=>x.id===m[2])){openLesson(m[2],true);return;}
+  if(m&&m[1]!=='lesson'&&document.getElementById('view-'+m[1])){showView(m[1],true);return;}
+  showView('home',true);
+}
+window.addEventListener('popstate',routeFromHash);
+
+// Many cards are clickable <div>s: make them reachable with Tab and usable with Enter/Space
+function enhanceClickables(root){
+  (root||document).querySelectorAll('[onclick]:not(button):not(a):not(input):not(select):not(textarea):not([role]):not(svg *)').forEach(el=>{
+    el.setAttribute('role','button');
+    if(!el.hasAttribute('tabindex'))el.tabIndex=0;
+  });
+}
+document.addEventListener('keydown',e=>{
+  if((e.key==='Enter'||e.key===' ')&&e.target.getAttribute&&e.target.getAttribute('role')==='button'&&e.target.tagName!=='BUTTON'){
+    e.preventDefault();e.target.click();
+  }
+});
+new MutationObserver(muts=>muts.forEach(m=>m.addedNodes.forEach(n=>{if(n.nodeType===1){if(n.matches('[onclick]'))enhanceClickables(n.parentNode);else enhanceClickables(n);}}))).observe(document.documentElement,{childList:true,subtree:true});
+document.addEventListener('DOMContentLoaded',()=>enhanceClickables());
+
+function showView(n,fromHistory){
   document.querySelectorAll('.view').forEach(v=>v.classList.remove('active'));
   document.getElementById('view-'+n).classList.add('active');
+  if(!fromHistory)setRoute(n);
   // A lesson belongs to the Modules section of the menu
   const navKey=n==='lesson'?'modules':n;
   document.querySelectorAll('nav [data-view]').forEach(b=>b.classList.toggle('active',b.dataset.view===navKey));
@@ -7823,7 +7853,7 @@ function filterGloss(){
   if(c)c.textContent=shown?`${shown} term${shown>1?'s':''}`:'No term found. Try another word, or clear the search.';
 }
 
-document.addEventListener('DOMContentLoaded',function(){refreshModuleViews();buildGloss();updateProg();updateSiteStats();});
+document.addEventListener('DOMContentLoaded',function(){refreshModuleViews();buildGloss();updateProg();updateSiteStats();if(location.hash.startsWith('#/'))routeFromHash();});
 setInterval(updateProg,30000);
 
 // ── LAB MODAL DATA ──────────────────────────────────────────────
@@ -8689,6 +8719,8 @@ saa2ViewerGo(0);
 .theory-block h4,.lab-step .sbody h4{font-size:16px}
 .cmd{font-size:13px}
 .cvss-table{font-size:14px}
+/* Keyboard focus is always visible */
+[role="button"]:focus-visible,button:focus-visible,a:focus-visible,input:focus-visible{outline:2px solid var(--green);outline-offset:2px}
 </style>
 
 <style>
