@@ -595,51 +595,27 @@ footer p{font-size:12px;color:var(--text3);font-family:var(--font-mono)}
 .hp-step-body h4{font-size:14px;font-weight:700;color:#fff;margin-bottom:4px}
 .hp-step-body p{font-size:12px;color:var(--text2);line-height:1.6;font-family:var(--font-mono)}
 
-/* Right illustration box */
+/* Right — preview of what a module looks like (Theory → Lab → Quiz) */
 .hp-how-visual{
-  background:linear-gradient(135deg,#07150e,#060c18);
-  border:1px solid var(--border);border-radius:16px;
-  padding:2.5rem;min-height:340px;position:relative;overflow:hidden;
-  display:flex;flex-direction:column;justify-content:space-between;
+  background:var(--bg2);border:1px solid var(--border2);border-radius:16px;overflow:hidden;
+  box-shadow:0 24px 64px rgba(0,0,0,0.45);margin:0;
 }
-.hp-how-visual::before{
-  content:'';position:absolute;top:-60px;right:-60px;width:200px;height:200px;
-  background:radial-gradient(circle,rgba(34,197,94,0.1),transparent 70%);
-}
-.hp-circuit{position:absolute;inset:0;opacity:0.18}
-.hp-vis-tools{display:flex;flex-direction:column;gap:10px;position:relative;z-index:1}
-.hp-vis-tool{
-  display:flex;align-items:center;gap:12px;
-  background:rgba(34,197,94,0.06);border:1px solid rgba(34,197,94,0.12);
-  border-radius:10px;padding:10px 14px;
-}
-.hp-vis-tool-icon{font-size:18px;flex-shrink:0}
-.hp-vis-tool-name{font-size:13px;font-weight:700;color:#fff;font-family:var(--font-head)}
-.hp-vis-tool-sub{font-size:12px;color:var(--text3);font-family:var(--font-mono)}
-.hp-vis-status{margin-left:auto;font-size:12px;color:#22c55e;font-family:var(--font-mono);display:flex;align-items:center;gap:5px;flex-shrink:0}
-.hp-vis-status::before{content:'';width:5px;height:5px;border-radius:50%;background:#22c55e;display:inline-block;animation:livepulse 2s infinite}
-
-/* ── TOOLS GRID ── */
-.hp-tools-section{background:var(--bg2);border-top:1px solid var(--border);border-bottom:1px solid var(--border);padding:4.5rem 3rem}
-.hp-tools-inner{max-width:1200px;margin:0 auto}
-.hp-tools-hdr{display:flex;align-items:flex-end;justify-content:space-between;margin-bottom:2rem;flex-wrap:wrap;gap:1rem}
-.hp-tools-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:14px}
-.hp-tool-card{
-  background:var(--bg3);border:1px solid var(--border);border-radius:14px;
-  padding:22px;cursor:pointer;transition:all 0.25s;position:relative;overflow:hidden;
-}
-.hp-tool-card::before{content:'';position:absolute;top:0;left:0;right:0;height:2px}
-.hp-tool-card:hover{border-color:var(--border2);transform:translateY(-5px);box-shadow:0 16px 48px rgba(0,0,0,0.5)}
-.hp-tc-icon{width:46px;height:46px;border-radius:12px;display:flex;align-items:center;justify-content:center;font-size:21px;margin-bottom:14px}
-.hp-tc-name{font-size:15px;font-weight:700;color:#fff;font-family:var(--font-head);margin-bottom:6px}
-.hp-tc-desc{font-size:12px;color:var(--text2);font-family:var(--font-mono);line-height:1.65;margin-bottom:12px}
-.hp-tc-tags{display:flex;gap:5px;flex-wrap:wrap;margin-bottom:12px}
-.hp-tc-tag{font-size:12px;padding:2px 9px;border-radius:6px;font-family:var(--font-mono);font-weight:600}
-.hp-tc-footer{display:flex;align-items:center;justify-content:space-between;padding-top:12px;border-top:1px solid rgba(255,255,255,0.05)}
-.hp-tc-level{font-size:12px;font-family:var(--font-mono);color:var(--text3);text-transform:uppercase;letter-spacing:0.06em}
-.hp-tc-arrow{color:var(--green);opacity:0;transition:opacity 0.2s;font-size:14px}
-.hp-tool-card:hover .hp-tc-arrow{opacity:1}
-
+.hp-demo{pointer-events:none;user-select:none}
+.hp-demo-hdr{display:flex;align-items:center;gap:10px;padding:14px 18px;background:var(--bg);border-bottom:1px solid var(--border)}
+.hp-demo-hdr strong{color:#fff;font-size:15px;flex:1}
+.hp-demo-body{padding:16px 18px}
+.hp-demo-tabs{display:flex;gap:6px;margin-bottom:14px}
+.hp-demo-tabs span{display:flex;align-items:center;gap:5px;font-size:13px;padding:6px 12px;border-radius:9px;border:1px solid rgba(255,255,255,0.08);color:var(--text2)}
+.hp-demo-tabs span.on{background:rgba(34,197,94,0.1);border-color:var(--border2);color:var(--green)}
+.hp-demo-tabs .ti-check{color:var(--green)}
+.hp-demo .q-text{font-size:15px;margin-bottom:10px}
+.hp-demo .quiz-opts{gap:6px}
+.hp-demo .q-opt{padding:8px 12px;font-size:14px}
+.hp-demo .info-box{margin:10px 0 0;font-size:14px!important}
+.hp-demo-foot{display:flex;align-items:center;justify-content:space-between;gap:10px;padding:12px 18px;border-top:1px solid var(--border);background:rgba(0,0,0,0.2);flex-wrap:wrap}
+.hp-demo-score{font-family:var(--font-mono);font-size:14px;color:var(--green)}
+.hp-demo-next{font-size:14px;color:var(--green);font-weight:600;display:flex;align-items:center;gap:5px}
+.hp-how-visual figcaption{font-size:13px;color:var(--text2);padding:10px 18px 14px;border-top:1px solid var(--border)}
 /* ── PROGRESS + MODULES ── */
 .hp-bottom{padding:4.5rem 3rem}
 .hp-bottom-inner{max-width:1200px;margin:0 auto;display:grid;grid-template-columns:300px 1fr;gap:20px}
@@ -702,15 +678,13 @@ footer p{font-size:12px;color:var(--text3);font-family:var(--font-mono)}
   .hp-right-card{max-width:520px;width:100%;margin:0 auto}
   .hp-kpi-grid{grid-template-columns:repeat(3,1fr)}
   .hp-how-grid{grid-template-columns:1fr}
-  .hp-how-visual{display:none}
-  .hp-tools-grid{grid-template-columns:repeat(2,1fr)}
+  .hp-how-visual{max-width:520px;width:100%;margin:0 auto}
   .hp-bottom-inner{grid-template-columns:1fr}
 }
 @media(max-width:640px){
   .hp-hero{padding:3rem 1.5rem}
-  .hp-kpi-section,.hp-how,.hp-tools-section,.hp-bottom,.hp-fw-section,.hp-cta-banner{padding-left:1.5rem;padding-right:1.5rem}
+  .hp-kpi-section,.hp-how,.hp-bottom,.hp-fw-section,.hp-cta-banner{padding-left:1.5rem;padding-right:1.5rem}
   .hp-kpi-grid{grid-template-columns:repeat(2,1fr)}
-  .hp-tools-grid{grid-template-columns:1fr}
 }
 </style>
 
@@ -841,123 +815,30 @@ footer p{font-size:12px;color:var(--text3);font-family:var(--font-mono)}
             <div class="hp-step"><div class="hp-step-num">04</div><div class="hp-step-body"><h4>Apply &amp; Advance</h4><p>Build a portfolio of documented labs. Be ready for SOC Analyst, GRC, and cloud security roles.</p></div></div>
           </div>
         </div>
-        <div class="hp-how-visual">
-          <svg class="hp-circuit" viewBox="0 0 400 340" xmlns="http://www.w3.org/2000/svg" style="position:absolute;inset:0;width:100%;height:100%">
-            <g stroke="#22c55e" stroke-width="1" fill="none">
-              <path d="M20 170 H100 V90 H200 V40 H360"/><path d="M100 170 V260 H300 V300"/>
-              <path d="M200 90 V180 H370 V230"/><path d="M60 260 H150 V310 H280"/>
-              <circle cx="100" cy="170" r="4" fill="#22c55e"/><circle cx="200" cy="90" r="4" fill="#22c55e"/>
-              <circle cx="200" cy="180" r="4" fill="#22c55e"/><circle cx="150" cy="310" r="4" fill="#22c55e"/>
-              <rect x="340" y="32" width="28" height="16" rx="3" fill="rgba(34,197,94,0.15)" stroke="#22c55e"/>
-              <rect x="355" y="222" width="28" height="16" rx="3" fill="rgba(34,197,94,0.15)" stroke="#22c55e"/>
-            </g>
-          </svg>
-          <div style="position:relative;z-index:1;text-align:center;margin-bottom:1.5rem">
-            <div style="font-size:42px;margin-bottom:8px">🖥️</div>
-            <div style="color:var(--green);font-family:var(--font-mono);font-size:12px;letter-spacing:0.1em">REAL TOOLS · REAL LABS · VMware</div>
+        <figure class="hp-how-visual">
+          <div class="hp-demo" aria-hidden="true">
+            <div class="hp-demo-hdr"><strong>Nessus — Vulnerability scanning</strong><span class="lv-badge">Beginner</span></div>
+            <div class="hp-demo-body">
+              <div class="hp-demo-tabs">
+                <span><i class="ti ti-check"></i> Theory</span>
+                <span><i class="ti ti-check"></i> Lab</span>
+                <span class="on"><i class="ti ti-help-circle"></i> Quiz</span>
+              </div>
+              <div class="q-text">3. A CVSS score of 9.5 requires patching within:</div>
+              <div class="quiz-opts">
+                <div class="q-opt wrong"><i class="ti ti-x"></i> 7 days</div>
+                <div class="q-opt correct"><i class="ti ti-check"></i> 24–48 hours</div>
+                <div class="q-opt"><i class="ti ti-circle"></i> 30 days</div>
+              </div>
+              <div class="info-box">9.5 is in the Critical band (9.0–10.0), so the target is to patch within 24–48 hours.</div>
+            </div>
+            <div class="hp-demo-foot">
+              <span class="hp-demo-score">Score 75% · Module completed ✓</span>
+              <span class="hp-demo-next">Next module: Wireshark <i class="ti ti-arrow-right"></i></span>
+            </div>
           </div>
-          <div class="hp-vis-tools">
-            <div class="hp-vis-tool"><span class="hp-vis-tool-icon">🔍</span><div><div class="hp-vis-tool-name">Nessus Essentials</div><div class="hp-vis-tool-sub">Vulnerability Scanner</div></div><span class="hp-vis-status">Active</span></div>
-            <div class="hp-vis-tool"><span class="hp-vis-tool-icon">📊</span><div><div class="hp-vis-tool-name">Splunk SIEM</div><div class="hp-vis-tool-sub">Log Correlation</div></div><span class="hp-vis-status">Active</span></div>
-            <div class="hp-vis-tool"><span class="hp-vis-tool-icon">🔴</span><div><div class="hp-vis-tool-name">FortiGate NGFW</div><div class="hp-vis-tool-sub">IPS Block Mode</div></div><span class="hp-vis-status">Active</span></div>
-          </div>
-        </div>
-      </div>
-    </div>
-  </div>
-
-  <!-- TOOLS GRID -->
-  <div class="hp-tools-section">
-    <div class="hp-tools-inner">
-      <div class="hp-tools-hdr">
-        <div>
-          <div class="hp-sec-tag">Enterprise Tooling</div>
-          <div class="hp-sec-title" style="font-size:clamp(20px,2.5vw,28px);margin-bottom:4px">Train with Industry-Standard Tools</div>
-          <div style="font-size:13px;color:var(--text2);font-family:var(--font-mono)">Every module uses the same tools deployed in real SOC, GRC and pentest environments.</div>
-        </div>
-        <button class="hp-btn-s" onclick="showView('modules')" style="flex-shrink:0"><i class="ti ti-book"></i> All Modules</button>
-      </div>
-      <div class="hp-tools-grid">
-
-        <div class="hp-tool-card" onclick="openLesson('nessus');showView('lesson')">
-          <div style="position:absolute;top:0;left:0;right:0;height:2px;background:#00b4d8"></div>
-          <div class="hp-tc-icon" style="background:rgba(0,180,216,0.1)"><i class="ti ti-radar" style="color:#00b4d8;font-size:22px"></i></div>
-          <div class="hp-tc-name">Nessus — Vulnerability Scanner</div>
-          <div class="hp-tc-desc">100,000+ plugins. Credentialed &amp; uncredentialed scans, CVSS scoring, and compliance auditing for PCI-DSS, HIPAA, and CIS benchmarks.</div>
-          <div class="hp-tc-tags">
-            <span class="hp-tc-tag" style="background:rgba(0,180,216,0.1);color:#00b4d8;border:1px solid rgba(0,180,216,0.25)">CVE Detection</span>
-            <span class="hp-tc-tag" style="background:rgba(0,180,216,0.1);color:#00b4d8;border:1px solid rgba(0,180,216,0.25)">CVSS 3.1</span>
-            <span class="hp-tc-tag" style="background:rgba(255,255,255,0.04);color:var(--text3);border:1px solid rgba(255,255,255,0.08)">Tenable</span>
-          </div>
-          <div class="hp-tc-footer"><span class="hp-tc-level">Beginner</span><i class="ti ti-arrow-right hp-tc-arrow"></i></div>
-        </div>
-
-        <div class="hp-tool-card" onclick="openLesson('splunk');showView('lesson')">
-          <div style="position:absolute;top:0;left:0;right:0;height:2px;background:#22c55e"></div>
-          <div class="hp-tc-icon" style="background:rgba(34,197,94,0.1)"><i class="ti ti-chart-dots" style="color:#22c55e;font-size:22px"></i></div>
-          <div class="hp-tc-name">Splunk — SIEM &amp; Log Correlation</div>
-          <div class="hp-tc-desc">Gartner Leader 11 years. Ingest logs from every source, build correlation rules, detect APT patterns, automate response with Adaptive Response.</div>
-          <div class="hp-tc-tags">
-            <span class="hp-tc-tag" style="background:rgba(34,197,94,0.1);color:#22c55e;border:1px solid rgba(34,197,94,0.25)">SIEM</span>
-            <span class="hp-tc-tag" style="background:rgba(34,197,94,0.1);color:#22c55e;border:1px solid rgba(34,197,94,0.25)">SPL</span>
-            <span class="hp-tc-tag" style="background:rgba(255,255,255,0.04);color:var(--text3);border:1px solid rgba(255,255,255,0.08)">SOC</span>
-          </div>
-          <div class="hp-tc-footer"><span class="hp-tc-level">Intermediate</span><i class="ti ti-arrow-right hp-tc-arrow"></i></div>
-        </div>
-
-        <div class="hp-tool-card" onclick="openLesson('fortigate');showView('lesson')">
-          <div style="position:absolute;top:0;left:0;right:0;height:2px;background:#ef4444"></div>
-          <div class="hp-tc-icon" style="background:rgba(239,68,68,0.1)"><i class="ti ti-wall" style="color:#ef4444;font-size:22px"></i></div>
-          <div class="hp-tc-name">FortiGate — Next-Gen Firewall</div>
-          <div class="hp-tc-desc">World's most-deployed NGFW. Zone-based segmentation, Layer 7 app control, IPS block mode, and Security Fabric integration with FortiAnalyzer.</div>
-          <div class="hp-tc-tags">
-            <span class="hp-tc-tag" style="background:rgba(239,68,68,0.1);color:#ef4444;border:1px solid rgba(239,68,68,0.25)">NGFW</span>
-            <span class="hp-tc-tag" style="background:rgba(239,68,68,0.1);color:#ef4444;border:1px solid rgba(239,68,68,0.25)">IPS</span>
-            <span class="hp-tc-tag" style="background:rgba(255,255,255,0.04);color:var(--text3);border:1px solid rgba(255,255,255,0.08)">Zero Trust</span>
-          </div>
-          <div class="hp-tc-footer"><span class="hp-tc-level">Intermediate</span><i class="ti ti-arrow-right hp-tc-arrow"></i></div>
-        </div>
-
-        <div class="hp-tool-card" onclick="openLesson('metasploit');showView('lesson')">
-          <div style="position:absolute;top:0;left:0;right:0;height:2px;background:#a78bfa"></div>
-          <div class="hp-tc-icon" style="background:rgba(167,139,250,0.1)"><i class="ti ti-sword" style="color:#a78bfa;font-size:22px"></i></div>
-          <div class="hp-tc-name">Metasploit — Penetration Testing</div>
-          <div class="hp-tc-desc">2,300+ exploits. Safely simulate real attacks, post-exploit with Meterpreter, generate payloads with msfvenom, map findings to MITRE ATT&amp;CK.</div>
-          <div class="hp-tc-tags">
-            <span class="hp-tc-tag" style="background:rgba(167,139,250,0.1);color:#a78bfa;border:1px solid rgba(167,139,250,0.25)">Exploitation</span>
-            <span class="hp-tc-tag" style="background:rgba(167,139,250,0.1);color:#a78bfa;border:1px solid rgba(167,139,250,0.25)">Red Team</span>
-            <span class="hp-tc-tag" style="background:rgba(255,255,255,0.04);color:var(--text3);border:1px solid rgba(255,255,255,0.08)">ATT&amp;CK</span>
-          </div>
-          <div class="hp-tc-footer"><span class="hp-tc-level">Advanced</span><i class="ti ti-arrow-right hp-tc-arrow"></i></div>
-        </div>
-
-        <div class="hp-tool-card" onclick="openLesson('wireshark');showView('lesson')">
-          <div style="position:absolute;top:0;left:0;right:0;height:2px;background:#3b82f6"></div>
-          <div class="hp-tc-icon" style="background:rgba(59,130,246,0.1)"><i class="ti ti-wave-sine" style="color:#3b82f6;font-size:22px"></i></div>
-          <div class="hp-tc-name">Wireshark — Packet Analysis</div>
-          <div class="hp-tc-desc">Capture and decode 3,000+ protocols. Detect C2 beaconing, lateral movement via SMB/RDP, DNS exfiltration. Essential for network forensics.</div>
-          <div class="hp-tc-tags">
-            <span class="hp-tc-tag" style="background:rgba(59,130,246,0.1);color:#3b82f6;border:1px solid rgba(59,130,246,0.25)">Forensics</span>
-            <span class="hp-tc-tag" style="background:rgba(59,130,246,0.1);color:#3b82f6;border:1px solid rgba(59,130,246,0.25)">BPF Filters</span>
-            <span class="hp-tc-tag" style="background:rgba(255,255,255,0.04);color:var(--text3);border:1px solid rgba(255,255,255,0.08)">Network</span>
-          </div>
-          <div class="hp-tc-footer"><span class="hp-tc-level">Beginner</span><i class="ti ti-arrow-right hp-tc-arrow"></i></div>
-        </div>
-
-        <div class="hp-tool-card" onclick="openLesson('fortianalyzer');showView('lesson')">
-          <div style="position:absolute;top:0;left:0;right:0;height:2px;background:#f97316"></div>
-          <div class="hp-tc-icon" style="background:rgba(249,115,22,0.1)"><i class="ti ti-chart-bar" style="color:#f97316;font-size:22px"></i></div>
-          <div class="hp-tc-name">FortiAnalyzer — Log Management</div>
-          <div class="hp-tc-desc">Centralize FortiGate logs. IOC threat hunts against FortiGuard intelligence. SOC dashboards. One-click PCI-DSS &amp; ISO 27001 compliance reports.</div>
-          <div class="hp-tc-tags">
-            <span class="hp-tc-tag" style="background:rgba(249,115,22,0.1);color:#f97316;border:1px solid rgba(249,115,22,0.25)">SIEM</span>
-            <span class="hp-tc-tag" style="background:rgba(249,115,22,0.1);color:#f97316;border:1px solid rgba(249,115,22,0.25)">IOC Hunt</span>
-            <span class="hp-tc-tag" style="background:rgba(255,255,255,0.04);color:var(--text3);border:1px solid rgba(255,255,255,0.08)">Compliance</span>
-          </div>
-          <div class="hp-tc-footer"><span class="hp-tc-level">Intermediate</span><i class="ti ti-arrow-right hp-tc-arrow"></i></div>
-        </div>
-
-      </div>
+          <figcaption>What a module looks like: theory, a hands-on lab, then a quiz that explains every answer.</figcaption>
+        </figure>      </div>
     </div>
   </div>
 
