@@ -300,6 +300,22 @@ nav{
 .quiz-result p{font-size:13px;color:var(--text2);margin-top:5px;font-family:var(--font-mono)}
 .sub-btn{background:rgba(34,197,94,0.08);border:1px solid var(--border2);color:var(--green);padding:9px 22px;border-radius:9px;font-size:14px;cursor:pointer;margin-top:1rem;font-family:var(--font-head);font-weight:600;transition:all 0.2s;display:inline-flex;align-items:center;gap:7px}
 .sub-btn:hover{background:rgba(34,197,94,0.16)}
+.quiz-actions{display:flex;flex-wrap:wrap;gap:8px;justify-content:center;margin-top:0.5rem}
+.step-nav{display:flex;justify-content:flex-end;border-top:1px solid var(--border);margin-top:1.5rem;padding-top:0.5rem}
+
+/* MODULE INTRO (objectives, prerequisites, time) */
+.mod-intro{display:grid;grid-template-columns:1.4fr 1fr;gap:1.25rem;background:var(--bg3);border:1px solid var(--border2);border-radius:12px;padding:1.1rem 1.25rem;margin-bottom:1.5rem}
+.mod-intro h4{font-size:15px;color:#fff;margin-bottom:6px;display:flex;align-items:center;gap:7px}
+.mod-intro h4 i{color:var(--green)}
+.mod-intro ul{padding-left:1.2rem;color:var(--text);font-size:15px;line-height:1.7}
+.mod-intro p{margin:0}
+.mod-intro-pre{display:flex;flex-wrap:wrap;gap:4px 14px}
+@media(max-width:768px){.mod-intro{grid-template-columns:1fr}}
+
+/* COPY BUTTON on command blocks */
+.copy-btn{position:absolute;top:8px;right:8px;background:rgba(255,255,255,0.06);border:1px solid rgba(255,255,255,0.14);color:var(--text2);border-radius:7px;padding:3px 9px;font-size:12px;font-family:var(--font-head);cursor:pointer;display:flex;align-items:center;gap:4px;transition:all 0.15s}
+.copy-btn:hover{color:var(--green);border-color:var(--border2)}
+.cmd,.ist-cmd{position:relative;padding-right:84px!important}
 
 /* THREATS */
 .threat-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:12px;margin-bottom:1.75rem}
@@ -7647,6 +7663,61 @@ const LEARNING_PATH=[
 const LEVEL_ORDER={Beginner:0,Intermediate:1,Advanced:2};
 // Labs that run attacks: show the legal reminder before the steps
 const OFFENSIVE_MODULES=['metasploit'];
+
+// Shown at the top of each module: what the student will learn, what to do first, how long it takes
+const MODULE_META={
+  nessus:{time:'about 2 h',pre:['installation'],goals:['Explain what a vulnerability scanner does','Read a CVSS score and decide how fast to patch','Run a credentialed scan and prioritize the findings']},
+  splunk:{time:'about 2 h',pre:['installation','wireshark'],goals:['Explain what a SIEM is and why a SOC needs one','Describe the Splunk architecture (forwarder, indexer, search head)','Write a search and an alert that triggers an automated response']},
+  fortigate:{time:'about 2 h',pre:['installation'],goals:['Explain what makes a firewall "next-generation"','Design zone-based segmentation with a deny-all default','Describe how the Fortinet Security Fabric shares information']},
+  wireshark:{time:'about 1.5 h',pre:['installation'],goals:['Capture traffic and isolate it with filters','Recognize normal versus suspicious protocol behaviour','Spot signs of command-and-control (C2) traffic']},
+  metasploit:{time:'about 2.5 h',pre:['installation','nessus','wireshark'],goals:['Explain the legal and ethical limits of penetration testing','Follow the 6-phase pentest methodology','Map each attack step to MITRE ATT&CK']},
+  wazuh:{time:'about 2 h',pre:['installation'],goals:['Explain what an EDR/XDR agent monitors','Configure File Integrity Monitoring on a critical folder','Trigger and verify an automated active response']},
+  openvas:{time:'about 1.5 h',pre:['installation','nessus'],goals:['Install and run the open-source Greenbone scanner','Compare its results with Nessus','Use cross-validation to confirm real vulnerabilities']},
+  incident:{time:'about 3 h',pre:['wireshark','splunk'],goals:['Apply the 4 phases of NIST SP 800-61','Map the attacker\'s actions to MITRE ATT&CK','Know Canadian breach-notification obligations']},
+  'fortigate-advanced':{time:'about 2.5 h',pre:['fortigate'],goals:['Configure IPS in block mode and explain why','Build inter-zone policies with full logging','Integrate FortiGate into the Security Fabric']},
+  fortianalyzer:{time:'about 2 h',pre:['fortigate'],goals:['Centralize FortiGate logs in one place','Hunt for indicators of compromise (IOCs)','Generate a compliance report']},
+  risk:{time:'about 3 h',pre:[],goals:['Classify assets and identify threats and vulnerabilities','Score risk as Impact × Likelihood','Choose treatments and map them to ITSG-33 controls']},
+  riskassessment:{time:'about 3 h',pre:['risk'],goals:['Rate the C, I and A impact of a system','Apply the High Water Mark principle','Write the main sections of a SCAR']}
+};
+function moduleIntro(id){
+  const meta=MODULE_META[id];if(!meta)return '';
+  const preLinks=meta.pre.map(p=>{
+    if(p==='installation')return `<button class="gi-link" onclick="showView('installation')">Lab setup</button>`;
+    const pm=MODULES.find(x=>x.id===p);if(!pm)return '';
+    return `<button class="gi-link" onclick="openLesson('${pm.id}')">${pm.title.split(' — ')[0]}${done.has(pm.id)?' ✓':''}</button>`;
+  }).filter(Boolean);
+  return `<div class="mod-intro">
+    <div class="mod-intro-col"><h4><i class="ti ti-target"></i> You will learn to</h4><ul>${meta.goals.map(g=>`<li>${g}</li>`).join('')}</ul></div>
+    <div class="mod-intro-col"><h4><i class="ti ti-list-check"></i> Before you start</h4>${preLinks.length?`<div class="mod-intro-pre">${preLinks.join('')}</div>`:'<p>No prerequisite — you can start here.</p>'}
+      <h4 style="margin-top:12px"><i class="ti ti-clock"></i> Estimated time</h4><p>${meta.time} (theory, lab and quiz)</p></div>
+  </div>`;
+}
+// Next module in the same order as the Modules page (by level)
+function nextModule(id){
+  const order=[...MODULES].sort((a,b)=>LEVEL_ORDER[a.level]-LEVEL_ORDER[b.level]);
+  const i=order.findIndex(m=>m.id===id);
+  return i>=0&&i<order.length-1?order[i+1]:null;
+}
+function stepNav(label,tab){
+  return `<div class="step-nav"><button class="sub-btn" onclick="showLTab('${tab}');document.querySelector('.lesson-wrap').scrollIntoView({behavior:'smooth'})">${label} <i class="ti ti-arrow-right"></i></button></div>`;
+}
+// Copy button on every command block so students don't retype commands
+function addCopyButtons(root){
+  root.querySelectorAll('.cmd,.ist-cmd').forEach(b=>{
+    if(b.querySelector('.copy-btn'))return;
+    const btn=document.createElement('button');
+    btn.className='copy-btn';btn.type='button';btn.innerHTML='<i class="ti ti-copy"></i> Copy';
+    btn.setAttribute('aria-label','Copy command');
+    btn.onclick=e=>{
+      e.stopPropagation();
+      const text=[...b.childNodes].filter(n=>n!==btn).map(n=>n.textContent).join('').trim();
+      const ok=()=>{btn.innerHTML='<i class="ti ti-check"></i> Copied';setTimeout(()=>btn.innerHTML='<i class="ti ti-copy"></i> Copy',1500);};
+      if(navigator.clipboard)navigator.clipboard.writeText(text).then(ok,()=>{});
+    };
+    b.appendChild(btn);
+  });
+}
+document.addEventListener('DOMContentLoaded',()=>addCopyButtons(document));
 const modFilter={level:'',status:''};
 
 function renderLearningPath(){
@@ -7701,22 +7772,36 @@ function openLesson(id,fromHistory){
   if(cur!=='lesson')prevView=cur;
   document.getElementById('lesson-title').textContent=curMod.title;
   document.getElementById('lesson-badge').textContent=curMod.level;
-  document.getElementById('ltab-theory').innerHTML=curMod.theory;
+  document.getElementById('ltab-theory').innerHTML=moduleIntro(id)+curMod.theory+stepNav('Next: Lab','lab');
   const legal=OFFENSIVE_MODULES.includes(id)?`<div class="warn-box" role="note"><strong>Legal &amp; safety:</strong> only attack the virtual machines in your own isolated lab, or systems you have <strong>written authorization</strong> to test. Anything else is illegal in Canada (Criminal Code, s. 342.1 and 430), even for practice.</div>`:'';
-  document.getElementById('ltab-lab').innerHTML=legal+curMod.lab+`<div style="margin-top:1.25rem"><button class="sub-btn" onclick="markLab('${id}')"><i class="ti ti-check"></i> Mark lab complete</button></div>`;
+  document.getElementById('ltab-lab').innerHTML=legal+curMod.lab+`<div style="margin-top:1.25rem"><button class="sub-btn" onclick="markLab('${id}')"><i class="ti ti-check"></i> Mark lab complete</button></div>`+stepNav('Next: Quiz','quiz');
+  addCopyButtons(document.getElementById('ltab-lab'));
   buildQuiz(id);showLTab('theory');showView('lesson',fromHistory);
 }
 
 function markLab(id){labs.add(id);saveProgress();updateProg();}
 
-function buildQuiz(id){
+// The quiz being displayed: questions (and their options) can be shuffled on retry
+let quizState=[];
+function shuffled(arr){const a=[...arr];for(let i=a.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[a[i],a[j]]=[a[j],a[i]];}return a;}
+function buildQuiz(id,shuffle){
   const m=MODULES.find(x=>x.id===id);qAns={};
-  let h=m.quiz.map((q,qi)=>`<div class="quiz-q"><div class="q-text">${qi+1}. ${q.q}</div><div class="quiz-opts">${q.opts.map((o,oi)=>`<button class="q-opt" id="o-${qi}-${oi}" onclick="pick(${qi},${oi},${q.ans})"><i class="ti ti-circle"></i> ${o}</button>`).join('')}</div><div class="info-box" id="qe-${qi}" style="display:none"></div></div>`).join('');
+  const exps=QUIZ_EXPLANATIONS[id]||[];
+  quizState=m.quiz.map((q,i)=>{
+    const order=shuffle?shuffled(q.opts.map((_,oi)=>oi)):q.opts.map((_,oi)=>oi);
+    return {q:q.q,opts:order.map(oi=>q.opts[oi]),ans:order.indexOf(q.ans),exp:exps[i]};
+  });
+  if(shuffle)quizState=shuffled(quizState);
+  let h=quizState.map((q,qi)=>`<div class="quiz-q"><div class="q-text">${qi+1}. ${q.q}</div><div class="quiz-opts">${q.opts.map((o,oi)=>`<button class="q-opt" id="o-${qi}-${oi}" onclick="pick(${qi},${oi})"><i class="ti ti-circle"></i> ${o}</button>`).join('')}</div><div class="info-box" id="qe-${qi}" style="display:none"></div></div>`).join('');
   h+=`<button class="sub-btn" onclick="submit('${id}')"><i class="ti ti-check-circle"></i> Submit answers</button><div id="qr-${id}" style="display:none" class="quiz-result"></div>`;
   document.getElementById('ltab-quiz').innerHTML=h;
 }
+function retryQuiz(id){
+  buildQuiz(id,true);
+  document.querySelector('.lesson-wrap').scrollIntoView({behavior:'smooth'});
+}
 
-function pick(qi,oi,ans){
+function pick(qi,oi){
   qAns[qi]=oi;
   for(let i=0;i<4;i++){const b=document.getElementById(`o-${qi}-${i}`);if(b){b.style.background='';b.style.borderColor='';b.style.color='';b.querySelector('i').className='ti ti-circle';}}
   const b=document.getElementById(`o-${qi}-${oi}`);
@@ -7724,26 +7809,33 @@ function pick(qi,oi,ans){
 }
 
 function submit(id){
-  const m=MODULES.find(x=>x.id===id);let s=0;
-  m.quiz.forEach((q,qi)=>{
+  let s=0;
+  quizState.forEach((q,qi)=>{
     const ch=qAns[qi];if(ch===undefined)return;
     if(ch===q.ans)s++;
-    m.quiz[qi].opts.forEach((_,oi)=>{
+    q.opts.forEach((_,oi)=>{
       const b=document.getElementById(`o-${qi}-${oi}`);if(!b)return;
       b.style.background='';b.style.borderColor='';b.style.color='';
       if(oi===q.ans){b.className='q-opt correct';b.querySelector('i').className='ti ti-check';}
       else if(oi===ch&&ch!==q.ans){b.className='q-opt wrong';b.querySelector('i').className='ti ti-x';}
     });
   });
-  const exps=QUIZ_EXPLANATIONS[id]||[];
-  m.quiz.forEach((_,qi)=>{
+  quizState.forEach((q,qi)=>{
     const e=document.getElementById(`qe-${qi}`);
-    if(e&&exps[qi]){e.textContent=exps[qi];e.style.display='block';}
+    if(e&&q.exp){e.textContent=q.exp;e.style.display='block';}
   });
-  const pct=Math.round((s/m.quiz.length)*100);
+  const total=quizState.length;
+  const pct=Math.round((s/total)*100);
+  const passed=pct>=75;
+  const next=nextModule(id);
   const r=document.getElementById(`qr-${id}`);r.style.display='block';
-  r.innerHTML=`<div class="score">${pct}%</div><p>${s} / ${m.quiz.length} correct &nbsp;—&nbsp; ${pct>=75?'Excellent! Module completed ✓':'Review theory and try again.'}</p>`;
-  if(pct>=75){done.add(id);scores.push(pct);saveProgress();updateProg();refreshModuleViews();}
+  r.innerHTML=`<div class="score">${pct}%</div><p>${s} / ${total} correct &nbsp;—&nbsp; ${passed?'Excellent! Module completed ✓':'Read the explanations above, review the theory, then try again.'}</p>
+    <div class="quiz-actions">
+      <button class="sub-btn" onclick="retryQuiz('${id}')"><i class="ti ti-refresh"></i> Try again (shuffled)</button>
+      ${!passed?`<button class="sub-btn" onclick="showLTab('theory');document.querySelector('.lesson-wrap').scrollIntoView({behavior:'smooth'})"><i class="ti ti-book"></i> Review theory</button>`:''}
+      ${passed&&next?`<button class="sub-btn" onclick="openLesson('${next.id}')">Next module: ${next.title.split(' — ')[0]} <i class="ti ti-arrow-right"></i></button>`:''}
+    </div>`;
+  if(passed){done.add(id);scores.push(pct);saveProgress();updateProg();refreshModuleViews();}
 }
 
 function updateProg(){
