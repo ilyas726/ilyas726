@@ -764,7 +764,7 @@ footer p{font-size:12px;color:var(--text3);font-family:var(--font-mono)}
   <!-- KPI STRIP -->
   <div class="hp-kpi-section">
     <div class="hp-kpi-inner">
-      <div class="hp-kpi-label">Live Security Operations Snapshot</div>
+      <div class="hp-kpi-label">Example SOC snapshot · sample data for practice</div>
       <div class="hp-kpi-grid">
         <div class="hp-kpi-card"><div style="position:absolute;top:0;left:0;right:0;height:2px;background:linear-gradient(90deg,#ef4444,#f97316)"></div><div class="hp-kpi-name">Open Incidents</div><div class="hp-kpi-val" style="color:#ef4444">12</div><div class="hp-kpi-sub">↑ 2 this week</div><div class="hp-kpi-bar"><div class="hp-kpi-fill" style="width:60%;background:#ef4444"></div></div></div>
         <div class="hp-kpi-card"><div style="position:absolute;top:0;left:0;right:0;height:2px;background:linear-gradient(90deg,#eab308,#f97316)"></div><div class="hp-kpi-name">Compliance Score</div><div class="hp-kpi-val" style="color:#eab308">78%</div><div class="hp-kpi-sub">Target: 90%</div><div class="hp-kpi-bar"><div class="hp-kpi-fill" style="width:78%;background:#eab308"></div></div></div>
@@ -1585,13 +1585,13 @@ function mmCollapseAll(){document.querySelectorAll('.mm-ring').forEach(r=>r.styl
   <div class="ti-hero">
     <div class="ti-hero-inner">
       <div class="ti-hero-left">
-        <div class="ti-hero-tag">Live Threat Intelligence</div>
+        <div class="ti-hero-tag">Threat Intelligence · curated for training</div>
         <div class="ti-hero-title">Global <span>Threat</span> Landscape</div>
         <div class="ti-hero-sub">Real-world attack techniques, active threat actors, and CVEs used in our cybersecurity curriculum. MITRE ATT&CK mapped. NIST 800-61 aligned.</div>
       </div>
       <div class="ti-hero-stats">
-        <div class="ti-hstat"><div class="ti-hstat-n" style="color:#ef4444">6</div><div class="ti-hstat-l">Active APT Groups</div></div>
-        <div class="ti-hstat"><div class="ti-hstat-n" style="color:#f97316">4</div><div class="ti-hstat-l">Critical CVEs</div></div>
+        <div class="ti-hstat"><div class="ti-hstat-n" style="color:#ef4444">6</div><div class="ti-hstat-l">APT Groups Covered</div></div>
+        <div class="ti-hstat"><div class="ti-hstat-n" style="color:#f97316">4</div><div class="ti-hstat-l">Critical CVEs Covered</div></div>
         <div class="ti-hstat"><div class="ti-hstat-n" style="color:#22c55e">7</div><div class="ti-hstat-l">Kill Chain Steps</div></div>
         <div class="ti-hstat"><div class="ti-hstat-n" style="color:#06b6d4">MITRE</div><div class="ti-hstat-l">ATT&CK Mapped</div></div>
       </div>
@@ -1600,7 +1600,7 @@ function mmCollapseAll(){document.querySelectorAll('.mm-ring').forEach(r=>r.styl
 
   <!-- Live Ticker -->
   <div class="ti-ticker">
-    <div class="ti-ticker-label"><span style="width:6px;height:6px;border-radius:50%;background:#fff;animation:livepulse 1.5s infinite"></span>LIVE FEED</div>
+    <div class="ti-ticker-label"><span style="width:6px;height:6px;border-radius:50%;background:#fff;animation:livepulse 1.5s infinite"></span>HEADLINES</div>
     <div class="ti-ticker-track">
       <div class="ti-ticker-inner" id="ticker-inner">
         <!-- duplicated for seamless loop -->
@@ -2140,6 +2140,10 @@ function mmCollapseAll(){document.querySelectorAll('.mm-ring').forEach(r=>r.styl
 
   <!-- Main -->
   <div class="grc-main">
+    <div class="info-box" role="note" style="margin:0 0 1rem">
+      <strong style="color:#fff">Training example — all figures are fictional.</strong>
+      This dashboard shows what a GRC team monitors day to day. Practise reading it: which 3 findings would you fix first, and why? Use the severity, the due date and the framework affected to justify your choice.
+    </div>
     <!-- Tabs -->
     <div class="grc-tabs">
       <div class="grc-tab active" onclick="grcTab(this,'grc-panel')">Cybersecurity</div>
@@ -2683,7 +2687,7 @@ updateGrcClock();setInterval(updateGrcClock,1000);
 
   <!-- CERT ROADMAP -->
   <div id="rm-cert" class="rm-panel active">
-    <div style="font-size:12px;color:#8b9bb0;font-family:'JetBrains Mono',monospace;margin-bottom:1.25rem">Recommended certification progression — beginner to expert. Estimated hours and salary impact at each level.</div>
+    <div style="font-size:12px;color:#8b9bb0;font-family:'JetBrains Mono',monospace;margin-bottom:1.25rem">Recommended certification progression — beginner to expert. Estimated hours and salary impact at each level.<br>Exam costs are approximate list prices in USD and change often; salary impact is an estimate. Check the vendor's site and Canadian job postings before planning.</div>
     <div class="cert-flow">
       <!-- Beginner -->
       <div class="cert-lane">
@@ -3845,7 +3849,7 @@ function indTab(el,id){
   </div>
 
   <!-- Guide selector cards -->
-  <div class="inst-guides" style="grid-template-columns:repeat(10,1fr)">
+  <div class="inst-guides" style="grid-template-columns:repeat(auto-fill,minmax(150px,1fr))">
     <div class="inst-guide-card active-guide" style="--gc:#3b82f6" onclick="instTab(this,'inst-vmware')" id="igc-vmware">
       <div style="position:absolute;top:0;left:0;right:0;height:3px;background:#3b82f6;border-radius:3px 3px 0 0"></div>
       <span class="ig-icon">🖥️</span>
@@ -4478,6 +4482,7 @@ function indTab(el,id){
       <h2>MITRE Caldera</h2>
       <span class="ist-badge" style="background:rgba(239,68,68,0.1);color:#ef4444;border:1px solid rgba(239,68,68,0.25)">Adversary Emulation · MITRE ATT&amp;CK</span>
     </div>
+    <div class="warn-box" role="note"><strong>Legal &amp; safety:</strong> only run these tools against the virtual machines in your own isolated lab, or against systems you have <strong>written authorization</strong> to test. Attacking any other system is illegal in Canada (Criminal Code, s. 342.1 and 430) even "just to practise". Keep the lab network isolated from your home or school network.</div>
 
     <div class="inst-dl-banner" style="border-color:rgba(239,68,68,0.2)">
       <span class="inst-dl-icon">⚔️</span>
@@ -4603,6 +4608,7 @@ function indTab(el,id){
       <h2>Metasploit Framework</h2>
       <span class="ist-badge" style="background:rgba(234,179,8,0.1);color:#eab308;border:1px solid rgba(234,179,8,0.25)">Pen Testing · Exploitation · Post-exploitation</span>
     </div>
+    <div class="warn-box" role="note"><strong>Legal &amp; safety:</strong> only run these tools against the virtual machines in your own isolated lab, or against systems you have <strong>written authorization</strong> to test. Attacking any other system is illegal in Canada (Criminal Code, s. 342.1 and 430) even "just to practise". Keep the lab network isolated from your home or school network.</div>
 
     <div class="inst-dl-banner" style="border-color:rgba(234,179,8,0.2)">
       <span class="inst-dl-icon">💀</span>
@@ -5328,6 +5334,7 @@ function indTab(el,id){
       <h2>OWASP WebGoat — Web Application Security Lab</h2>
       <span class="ist-badge" style="background:rgba(147,51,234,0.1);color:#9333ea;border:1px solid rgba(147,51,234,0.25)">OWASP Top 10 · SQL Injection · XSS · Broken Auth</span>
     </div>
+    <div class="warn-box" role="note"><strong>Legal &amp; safety:</strong> only run these tools against the virtual machines in your own isolated lab, or against systems you have <strong>written authorization</strong> to test. Attacking any other system is illegal in Canada (Criminal Code, s. 342.1 and 430) even "just to practise". Keep the lab network isolated from your home or school network.</div>
 
     <div class="inst-dl-banner" style="border-color:rgba(147,51,234,0.2)">
       <span class="inst-dl-icon">🕸️</span>
@@ -7638,6 +7645,8 @@ const LEARNING_PATH=[
   {mod:'incident'}
 ];
 const LEVEL_ORDER={Beginner:0,Intermediate:1,Advanced:2};
+// Labs that run attacks: show the legal reminder before the steps
+const OFFENSIVE_MODULES=['metasploit'];
 const modFilter={level:'',status:''};
 
 function renderLearningPath(){
@@ -7692,7 +7701,8 @@ function openLesson(id){
   document.getElementById('lesson-title').textContent=curMod.title;
   document.getElementById('lesson-badge').textContent=curMod.level;
   document.getElementById('ltab-theory').innerHTML=curMod.theory;
-  document.getElementById('ltab-lab').innerHTML=curMod.lab+`<div style="margin-top:1.25rem"><button class="sub-btn" onclick="markLab('${id}')"><i class="ti ti-check"></i> Mark lab complete</button></div>`;
+  const legal=OFFENSIVE_MODULES.includes(id)?`<div class="warn-box" role="note"><strong>Legal &amp; safety:</strong> only attack the virtual machines in your own isolated lab, or systems you have <strong>written authorization</strong> to test. Anything else is illegal in Canada (Criminal Code, s. 342.1 and 430), even for practice.</div>`:'';
+  document.getElementById('ltab-lab').innerHTML=legal+curMod.lab+`<div style="margin-top:1.25rem"><button class="sub-btn" onclick="markLab('${id}')"><i class="ti ti-check"></i> Mark lab complete</button></div>`;
   buildQuiz(id);showLTab('theory');showView('lesson');
 }
 
