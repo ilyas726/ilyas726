@@ -442,6 +442,7 @@ footer p{font-size:11px;color:var(--text3);font-family:var(--font-mono)}
         <button class="nav-item" data-view="industries" onclick="showView('industries')"><i class="ti ti-building"></i><span>Industries<small>Security by sector</small></span></button>
         <button class="nav-item" data-view="riskassessment" onclick="showView('riskassessment')"><i class="ti ti-shield-star"></i><span>Risk Assessment<small>ITSG-33 risk process</small></span></button>
         <button class="nav-item" data-view="saa" onclick="showView('saa')"><i class="ti ti-presentation"></i><span>SA&amp;A<small>Security categorization and SCAR</small></span></button>
+        <button class="nav-item" data-view="dashboard" onclick="showView('dashboard')"><i class="ti ti-layout-dashboard"></i><span>GRC Dashboard<small>Example dashboard to practise reading</small></span></button>
       </div>
     </div>
     <button class="nav-btn" data-view="services" onclick="showView('services')"><i class="ti ti-briefcase"></i> Services</button>
@@ -1931,8 +1932,8 @@ function mmCollapseAll(){document.querySelectorAll('.mm-ring').forEach(r=>r.styl
 </div>
 
 
-<!-- GLOSSARY → GRC DASHBOARD -->
-<div id="view-glossary" class="view">
+<!-- GRC DASHBOARD (training example) -->
+<div id="view-dashboard" class="view">
 <style>
 /* ===== GRC DASHBOARD STYLES ===== */
 .grc-wrap{min-height:calc(100vh - 64px);background:#060c18;display:flex}
@@ -2357,6 +2358,36 @@ updateGrcClock();setInterval(updateGrcClock,1000);
 </script>
 </div>
 
+
+<!-- GLOSSARY -->
+<div id="view-glossary" class="view">
+<style>
+.gloss-letters{display:flex;flex-wrap:wrap;gap:6px;margin-bottom:0.9rem}
+.gloss-letter{min-width:38px;padding:7px 10px;border-radius:8px;border:1px solid var(--border);background:var(--bg2);color:var(--text2);font-family:var(--font-mono);font-size:14px;cursor:pointer;transition:all 0.15s}
+.gloss-letter:hover{border-color:var(--border2);color:var(--text)}
+.gloss-letter.active{background:var(--green-glow);border-color:var(--border2);color:var(--green)}
+.gloss-letter:focus-visible,.gi-link:focus-visible,.gloss-search:focus-visible{outline:2px solid var(--green);outline-offset:2px}
+.gloss-count{font-size:14px;color:var(--text2);margin-bottom:0.9rem}
+#view-glossary .gloss-grid{grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:12px}
+#view-glossary .gi{padding:16px 18px;display:flex;flex-direction:column;gap:6px}
+#view-glossary .gi .term{font-size:17px;margin:0}
+#view-glossary .gi .fr{font-size:14px;color:var(--text2);font-style:italic}
+#view-glossary .gi .def{font-size:15px;line-height:1.6;color:var(--text);font-family:var(--font-head);flex:1}
+.gi-link{align-self:flex-start;margin-top:6px;background:none;border:none;padding:0;color:var(--green);font-family:var(--font-head);font-size:14px;cursor:pointer;display:flex;align-items:center;gap:5px;text-align:left}
+.gi-link:hover{text-decoration:underline}
+</style>
+<div class="main">
+  <div class="sec-hd">
+    <div class="sec-tag">Learn</div>
+    <h1 class="sec-title" style="font-size:28px">Cybersecurity Glossary</h1>
+    <p class="sec-sub" style="font-size:15px">Key terms used in the modules, explained simply — with the French term for each.</p>
+  </div>
+  <input class="gloss-search" type="search" id="gloss-search" placeholder="Search a term or definition (e.g. firewall, pare-feu)…" aria-label="Search the glossary" oninput="filterGloss()">
+  <div class="gloss-letters" id="gloss-letters" role="group" aria-label="Filter by first letter"></div>
+  <p class="gloss-count" id="gloss-count" aria-live="polite"></p>
+  <div class="gloss-grid" id="gloss-grid"></div>
+</div>
+</div>
 
 <!-- TEAM -->
 <div id="view-team" class="view">
@@ -7164,7 +7195,8 @@ function raTab(el, panelId) {
     <a onclick="showView('home')">Home</a>
     <a onclick="showView('modules')">Modules</a>
     <a onclick="showView('threats')">Threats</a>
-    <a onclick="showView('glossary')">Dashboard</a>
+    <a onclick="showView('glossary')">Glossary</a>
+    <a onclick="showView('dashboard')">GRC Dashboard</a>
     <a onclick="showView('team')">Team</a>
     <a onclick="showView('roadmaps')">Roadmaps</a>
     <a onclick="showView('services')">Services</a>
@@ -7374,31 +7406,52 @@ const MODULES=[
    ]}
 ];
 
+// t = term, fr = French term, d = definition, m = module where the term is used (optional)
 const GLOSSARY=[
-  {t:'APT',d:'Advanced Persistent Threat — a sophisticated, long-term cyberattack by a well-funded adversary, often state-sponsored (e.g., APT41).'},
-  {t:'CVSS',d:'Common Vulnerability Scoring System — a 0–10 scale rating severity. 9.0+ = Critical, 7.0–8.9 = High, 4.0–6.9 = Medium, 0.1–3.9 = Low.'},
-  {t:'CVE',d:'Common Vulnerabilities and Exposures — a standardized ID for known vulnerabilities (e.g., CVE-2021-44228 = Log4Shell).'},
-  {t:'SIEM',d:'Security Information and Event Management — aggregates and correlates logs from all sources to detect threats in real time.'},
-  {t:'IOC',d:'Indicator of Compromise — forensic artifacts (IP addresses, file hashes, domains) signaling a system has been breached.'},
-  {t:'DPI',d:'Deep Packet Inspection — analyzes packet content beyond headers to identify application-layer threats.'},
-  {t:'IPS',d:'Intrusion Prevention System — actively blocks detected attack traffic (vs. IDS which only generates alerts).'},
-  {t:'TTP',d:'Tactics, Techniques, and Procedures — attacker methods catalogued in the MITRE ATT&CK framework.'},
-  {t:'FIM',d:'File Integrity Monitoring — detects unauthorized additions, modifications, or deletions to critical files in real time.'},
-  {t:'DMZ',d:'Demilitarized Zone — a network segment between internet and internal LAN hosting public-facing services.'},
-  {t:'NGFW',d:'Next-Generation Firewall — adds DPI, application control (Layer 7), and IPS beyond traditional port/IP filtering.'},
-  {t:'MITRE ATT&CK',d:'A knowledge base of real adversary tactics and techniques used to improve detection, threat hunting, and defence.'},
-  {t:'Lateral movement',d:'How attackers pivot through a network after initial access — using SMB, RDP, or stolen credentials to reach targets.'},
-  {t:'Credential dumping',d:'Extracting password hashes from memory or Active Directory using tools like Mimikatz.'},
-  {t:'Kill chain',d:'Attack sequence: Reconnaissance → Weaponization → Delivery → Exploitation → Installation → C2 → Exfiltration.'},
-  {t:'Zero-day',d:'A vulnerability exploited before the vendor has issued a patch — no defence exists at time of exploitation.'},
-  {t:'XDR',d:'Extended Detection and Response — correlates telemetry across endpoints, networks, email, and cloud in a unified platform.'},
-  {t:'EDR',d:'Endpoint Detection and Response — monitors endpoints to detect and respond to threats in real time.'},
-  {t:'NVT',d:'Network Vulnerability Test — a script in OpenVAS/Greenbone checking a system for a specific known vulnerability.'},
-  {t:'Threat hunting',d:'Proactively searching through logs and telemetry for threats that automated tools have not yet detected.'},
-  {t:'Playbook',d:'A documented, step-by-step procedure defining how to respond to a specific type of security incident.'},
-  {t:'PIPEDA',d:'Canada\'s federal privacy law — mandates breach notification obligations for private-sector organizations.'},
-  {t:'Loi 25',d:'Quebec\'s privacy law — modernizes personal data protection with 72-hour breach notification requirement.'},
-  {t:'NIST SP 800-61',d:'NIST Computer Security Incident Handling Guide — industry-standard 4-phase IR framework.'},
+  {t:'APT',fr:'Menace persistante avancée',d:'Advanced Persistent Threat — a sophisticated, long-term cyberattack by a well-funded adversary, often state-sponsored (e.g., APT41).',m:'incident'},
+  {t:'CVSS',fr:'Système de notation des vulnérabilités',d:'Common Vulnerability Scoring System — a 0–10 scale rating severity. 9.0+ = Critical, 7.0–8.9 = High, 4.0–6.9 = Medium, 0.1–3.9 = Low.',m:'nessus'},
+  {t:'CVE',fr:'Identifiant de vulnérabilité publique',d:'Common Vulnerabilities and Exposures — a standardized ID for known vulnerabilities (e.g., CVE-2021-44228 = Log4Shell).',m:'nessus'},
+  {t:'SIEM',fr:'Gestion des informations et événements de sécurité',d:'Security Information and Event Management — aggregates and correlates logs from all sources to detect threats in real time.',m:'splunk'},
+  {t:'IOC',fr:'Indicateur de compromission',d:'Indicator of Compromise — forensic artifacts (IP addresses, file hashes, domains) signaling a system has been breached.',m:'fortianalyzer'},
+  {t:'DPI',fr:'Inspection approfondie des paquets',d:'Deep Packet Inspection — analyzes packet content beyond headers to identify application-layer threats.',m:'fortigate'},
+  {t:'IPS',fr:'Système de prévention des intrusions',d:'Intrusion Prevention System — actively blocks detected attack traffic (vs. IDS which only generates alerts).',m:'fortigate-advanced'},
+  {t:'TTP',fr:'Tactiques, techniques et procédures',d:'Tactics, Techniques, and Procedures — attacker methods catalogued in the MITRE ATT&CK framework.',m:'incident'},
+  {t:'FIM',fr:'Surveillance de l\'intégrité des fichiers',d:'File Integrity Monitoring — detects unauthorized additions, modifications, or deletions to critical files in real time.',m:'wazuh'},
+  {t:'DMZ',fr:'Zone démilitarisée',d:'Demilitarized Zone — a network segment between internet and internal LAN hosting public-facing services.',m:'fortigate'},
+  {t:'NGFW',fr:'Pare-feu de nouvelle génération',d:'Next-Generation Firewall — adds DPI, application control (Layer 7), and IPS beyond traditional port/IP filtering.',m:'fortigate'},
+  {t:'MITRE ATT&CK',fr:'Base de connaissances MITRE ATT&CK',d:'A knowledge base of real adversary tactics and techniques used to improve detection, threat hunting, and defence.',m:'incident'},
+  {t:'Lateral movement',fr:'Mouvement latéral',d:'How attackers pivot through a network after initial access — using SMB, RDP, or stolen credentials to reach targets.',m:'wireshark'},
+  {t:'Credential dumping',fr:'Extraction d\'identifiants',d:'Extracting password hashes from memory or Active Directory using tools like Mimikatz.',m:'metasploit'},
+  {t:'Kill chain',fr:'Chaîne d\'attaque',d:'The 7 stages of an attack (Lockheed Martin model): Reconnaissance → Weaponization → Delivery → Exploitation → Installation → Command & Control → Actions on Objectives.',m:'incident'},
+  {t:'Zero-day',fr:'Faille du jour zéro',d:'A vulnerability exploited before the vendor has released a patch. No patch exists yet, so defenders rely on other controls (segmentation, EDR, monitoring).'},
+  {t:'XDR',fr:'Détection et réponse étendues',d:'Extended Detection and Response — correlates telemetry across endpoints, networks, email, and cloud in a unified platform.',m:'wazuh'},
+  {t:'EDR',fr:'Détection et réponse sur les terminaux',d:'Endpoint Detection and Response — monitors endpoints to detect and respond to threats in real time.',m:'wazuh'},
+  {t:'NVT',fr:'Test de vulnérabilité réseau',d:'Network Vulnerability Test — a script in OpenVAS/Greenbone checking a system for a specific known vulnerability.',m:'openvas'},
+  {t:'Threat hunting',fr:'Chasse aux menaces',d:'Proactively searching through logs and telemetry for threats that automated tools have not yet detected.',m:'fortianalyzer'},
+  {t:'Playbook',fr:'Guide d\'intervention',d:'A documented, step-by-step procedure defining how to respond to a specific type of security incident.',m:'incident'},
+  {t:'PIPEDA',fr:'LPRPDE',d:'Personal Information Protection and Electronic Documents Act — Canada\'s federal private-sector privacy law. Breaches with a real risk of significant harm must be reported to the Privacy Commissioner and affected individuals as soon as feasible.',m:'incident'},
+  {t:'Loi 25',fr:'Loi 25 (Québec)',d:'Québec\'s privacy law modernizing personal information protection. Confidentiality incidents that present a risk of serious injury must be reported promptly ("avec diligence") to the Commission d\'accès à l\'information and to the people affected.',m:'incident'},
+  {t:'NIST SP 800-61',fr:'Guide NIST de gestion des incidents',d:'NIST Computer Security Incident Handling Guide — industry-standard 4-phase IR framework.',m:'incident'},
+  {t:'Vulnerability',fr:'Vulnérabilité',d:'A weakness in software, hardware or configuration that an attacker could exploit, such as a missing patch or a default password.',m:'nessus'},
+  {t:'Exploit',fr:'Exploit / code d\'exploitation',d:'Code or a technique that takes advantage of a vulnerability to make a system do something unintended, such as running the attacker\'s commands.',m:'metasploit'},
+  {t:'Payload',fr:'Charge utile',d:'What runs on the target after a successful exploit, for example a reverse shell or Meterpreter session.',m:'metasploit'},
+  {t:'Penetration test',fr:'Test d\'intrusion',d:'An authorized, simulated attack on systems you are allowed to test, to prove which weaknesses can really be exploited.',m:'metasploit'},
+  {t:'Firewall',fr:'Pare-feu',d:'A device or software that allows or blocks network traffic according to rules (source, destination, port, application).',m:'fortigate'},
+  {t:'Phishing',fr:'Hameçonnage',d:'A fraudulent message (email, SMS, call) that tricks someone into clicking a link, opening an attachment or giving away credentials.'},
+  {t:'Ransomware',fr:'Rançongiciel',d:'Malware that encrypts files and demands payment to restore them, often after stealing a copy of the data.',m:'wazuh'},
+  {t:'C2',fr:'Commande et contrôle',d:'Command and Control — the channel an attacker uses to send instructions to compromised machines, often hidden in HTTPS or DNS traffic.',m:'wireshark'},
+  {t:'BPF filter',fr:'Filtre BPF',d:'Berkeley Packet Filter — an expression such as "tcp port 445" that limits a capture to the traffic you want to analyse.',m:'wireshark'},
+  {t:'Hash',fr:'Empreinte (hachage)',d:'A fixed-length fingerprint computed from data (e.g. SHA-256). Any change to the file changes the hash, which is how FIM and IOCs identify files.',m:'wazuh'},
+  {t:'SOC',fr:'Centre des opérations de sécurité',d:'Security Operations Center — the team that monitors alerts 24/7, investigates them and coordinates the response.',m:'splunk'},
+  {t:'CIA triad',fr:'Triade CID (confidentialité, intégrité, disponibilité)',d:'Confidentiality, Integrity, Availability — the three security properties every control aims to protect.',m:'riskassessment'},
+  {t:'Risk',fr:'Risque',d:'The chance that a threat exploits a vulnerability, combined with the impact if it does. Often scored as Impact × Likelihood.',m:'risk'},
+  {t:'Residual risk',fr:'Risque résiduel',d:'The risk that remains after security controls have been applied.',m:'risk'},
+  {t:'GRC',fr:'Gouvernance, risque et conformité',d:'Governance, Risk and Compliance — policies, risk management and audits that keep security aligned with the organization\'s obligations.',m:'risk'},
+  {t:'ITSG-33',fr:'ITSG-33',d:'The Government of Canada guidance (Canadian Centre for Cyber Security) for managing IT security risk through a catalogue of security controls.',m:'risk'},
+  {t:'SA&A',fr:'Évaluation et autorisation de sécurité (EAS)',d:'Security Assessment and Authorization — the process that assesses a system\'s controls and formally authorizes it to operate.',m:'riskassessment'},
+  {t:'High Water Mark',fr:'Principe de la valeur la plus élevée',d:'The overall security category of a system equals the highest of its Confidentiality, Integrity and Availability ratings.',m:'riskassessment'},
+  {t:'SCAR',fr:'Rapport d\'évaluation de la catégorisation de sécurité',d:'Security Categorization Assessment Report — the formal document produced by the security categorization step of SA&A.',m:'riskassessment'},
+  {t:'Protected B',fr:'Protégé B',d:'Government of Canada designation for information whose compromise could cause serious injury to an individual or organization.',m:'risk'},
 ];
 
 // Shown under each quiz question after submitting, in the same order as MODULES[].quiz
@@ -7609,15 +7662,35 @@ function showLTab(n){
 
 function goBack(){showView(prevView);}
 
+let glossLetter='';
 function buildGloss(){
   const grid=document.getElementById('gloss-grid');if(!grid)return;
-  grid.innerHTML=GLOSSARY.map(g=>`<div class="gi" data-t="${g.t.toLowerCase()}"><div class="term">${g.t}</div><div class="def">${g.d}</div></div>`).join('');
+  const terms=[...GLOSSARY].sort((a,b)=>a.t.localeCompare(b.t,'en',{sensitivity:'base'}));
+  grid.innerHTML=terms.map(g=>{
+    const mod=g.m&&MODULES.find(x=>x.id===g.m);
+    return `<div class="gi" data-letter="${g.t[0].toUpperCase()}">
+      <div class="term">${g.t}</div>${g.fr?`<div class="fr" lang="fr">${g.fr}</div>`:''}
+      <div class="def">${g.d}</div>
+      ${mod?`<button class="gi-link" onclick="openLesson('${mod.id}')"><i class="ti ti-arrow-right"></i> Used in: ${mod.title}</button>`:''}
+    </div>`;}).join('');
+  const letters=[...new Set(terms.map(g=>g.t[0].toUpperCase()))];
+  document.getElementById('gloss-letters').innerHTML=['All',...letters].map(l=>`<button class="gloss-letter${l==='All'?' active':''}" aria-pressed="${l==='All'}" onclick="setGlossLetter('${l==='All'?'':l}',this)">${l}</button>`).join('');
+  filterGloss();
 }
-
-function filterGloss(q){
-  document.querySelectorAll('.gi').forEach(el=>{
-    el.style.display=(el.dataset.t.includes(q.toLowerCase())||el.querySelector('.def').textContent.toLowerCase().includes(q.toLowerCase()))?'':'none';
+function setGlossLetter(l,btn){
+  glossLetter=l;
+  document.querySelectorAll('.gloss-letter').forEach(b=>{b.classList.toggle('active',b===btn);b.setAttribute('aria-pressed',b===btn);});
+  filterGloss();
+}
+function filterGloss(){
+  const q=(document.getElementById('gloss-search')?.value||'').trim().toLowerCase();
+  let shown=0;
+  document.querySelectorAll('#gloss-grid .gi').forEach(el=>{
+    const ok=(!glossLetter||el.dataset.letter===glossLetter)&&(!q||el.textContent.toLowerCase().includes(q));
+    el.style.display=ok?'':'none';if(ok)shown++;
   });
+  const c=document.getElementById('gloss-count');
+  if(c)c.textContent=shown?`${shown} term${shown>1?'s':''}`:'No term found. Try another word, or clear the search.';
 }
 
 document.addEventListener('DOMContentLoaded',function(){renderCards('home-grid');if(document.getElementById('all-grid'))renderCards('all-grid');buildGloss();updateProg();});
