@@ -431,6 +431,7 @@ footer p{font-size:12px;color:var(--text3);font-family:var(--font-mono)}
       <div class="nav-menu" data-label="Learn">
         <button class="nav-item" data-view="modules" onclick="showView('modules')"><i class="ti ti-book"></i><span>Modules<small>Theory, labs and quizzes</small></span></button>
         <button class="nav-item" data-view="roadmaps" onclick="showView('roadmaps')"><i class="ti ti-map"></i><span>Roadmaps<small>Certifications and career paths</small></span></button>
+        <button class="nav-item" data-view="careermap" onclick="showView('careermap')"><i class="ti ti-topology-star"></i><span>Career Map<small>Explore the security domains</small></span></button>
         <button class="nav-item" data-view="glossary" onclick="showView('glossary')"><i class="ti ti-vocabulary"></i><span>Glossary<small>Key terms explained simply</small></span></button>
       </div>
     </div>
@@ -730,9 +731,9 @@ footer p{font-size:12px;color:var(--text3);font-family:var(--font-mono)}
           <button class="hp-btn-s" onclick="showView('installation')"><i class="ti ti-download"></i> Lab Setup</button>
         </div>
         <div class="hp-stats-row">
-          <div class="hp-stat"><div class="hp-stat-n">10</div><div class="hp-stat-l">Modules</div></div>
-          <div class="hp-stat"><div class="hp-stat-n">9</div><div class="hp-stat-l">Lab Guides</div></div>
-          <div class="hp-stat"><div class="hp-stat-n">40+</div><div class="hp-stat-l">Quizzes</div></div>
+          <div class="hp-stat"><div class="hp-stat-n" id="stat-modules">12</div><div class="hp-stat-l">Modules</div></div>
+          <div class="hp-stat"><div class="hp-stat-n" id="stat-guides">10</div><div class="hp-stat-l">Lab Guides</div></div>
+          <div class="hp-stat"><div class="hp-stat-n" id="stat-questions">50</div><div class="hp-stat-l">Quiz questions</div></div>
           <div class="hp-stat"><div class="hp-stat-n">24/7</div><div class="hp-stat-l">Self-paced</div></div>
         </div>
       </div>
@@ -937,7 +938,7 @@ footer p{font-size:12px;color:var(--text3);font-family:var(--font-mono)}
       <div class="hp-mod-wrap">
         <div class="hp-mod-hdr">
           <h3>Training Modules</h3>
-          <span class="hp-view-all" onclick="showView('modules')">View mind map <i class="ti ti-arrow-right"></i></span>
+          <span class="hp-view-all" onclick="showView('modules')">All modules &amp; learning path <i class="ti ti-arrow-right"></i></span>
         </div>
         <div class="mod-grid" id="home-grid"></div>
       </div>
@@ -1029,7 +1030,72 @@ setInterval(updateHomeRing, 1000);
 
 </div><!-- /view-home -->
 
+<!-- MODULES — list with recommended path and filters -->
 <div id="view-modules" class="view">
+<style>
+.ml-path{background:var(--bg2);border:1px solid var(--border2);border-radius:16px;padding:1.4rem 1.5rem;margin-bottom:2rem}
+.ml-path h2{font-size:20px;color:#fff;margin-bottom:4px;display:flex;align-items:center;gap:8px}
+.ml-path h2 i{color:var(--green)}
+.ml-path>p{color:var(--text2);font-size:15px;margin-bottom:1.1rem}
+.ml-steps{display:grid;grid-template-columns:repeat(auto-fit,minmax(170px,1fr));gap:10px;list-style:none;counter-reset:step}
+.ml-step{counter-increment:step}
+.ml-step button{width:100%;height:100%;text-align:left;background:var(--bg3);border:1px solid var(--border);border-radius:12px;padding:12px 14px;cursor:pointer;color:var(--text);font-family:var(--font-head);display:flex;flex-direction:column;gap:4px;transition:all 0.15s}
+.ml-step button:hover{border-color:var(--border2)}
+.ml-step button:focus-visible{outline:2px solid var(--green);outline-offset:2px}
+.ml-step-top{display:flex;align-items:center;gap:8px;font-family:var(--font-mono);font-size:12px;color:var(--text2)}
+.ml-step-top::before{content:counter(step);width:24px;height:24px;border-radius:50%;display:inline-flex;align-items:center;justify-content:center;background:var(--green-glow);border:1px solid var(--border2);color:var(--green);font-weight:700}
+.ml-step.done .ml-step-top::before{content:'✓';background:var(--green2);color:#fff}
+.ml-step-title{font-size:15px;font-weight:600}
+.ml-filters{display:flex;flex-wrap:wrap;gap:8px;align-items:center;margin-bottom:1.25rem}
+.ml-filters .lbl{font-size:13px;color:var(--text2);font-family:var(--font-mono);margin-right:2px}
+.ml-chip{padding:7px 14px;border-radius:20px;border:1px solid var(--border);background:var(--bg2);color:var(--text2);font-family:var(--font-head);font-size:14px;cursor:pointer;transition:all 0.15s}
+.ml-chip:hover{border-color:var(--border2);color:var(--text)}
+.ml-chip.active{background:var(--green-glow);border-color:var(--border2);color:var(--green)}
+.ml-chip:focus-visible{outline:2px solid var(--green);outline-offset:2px}
+.ml-sep{width:1px;height:24px;background:var(--border2);margin:0 6px}
+.ml-level{display:inline-block;font-size:12px;font-family:var(--font-mono);padding:2px 9px;border-radius:8px;margin-bottom:0.6rem;border:1px solid}
+.ml-level.Beginner{color:#86efac;border-color:rgba(34,197,94,0.35);background:rgba(34,197,94,0.08)}
+.ml-level.Intermediate{color:#fcd34d;border-color:rgba(234,179,8,0.35);background:rgba(234,179,8,0.08)}
+.ml-level.Advanced{color:#fca5a5;border-color:rgba(239,68,68,0.35);background:rgba(239,68,68,0.08)}
+.ml-empty{color:var(--text2);font-size:15px;padding:1rem 0}
+@media(max-width:768px){
+  .ml-path{padding:1.1rem 1rem}
+  .ml-steps{grid-template-columns:1fr 1fr;gap:8px}
+  .ml-step button{padding:10px 11px}
+  .ml-sep{display:none}
+}
+</style>
+<div class="main">
+  <div class="sec-hd">
+    <div class="sec-tag">Learn</div>
+    <h1 class="sec-title" style="font-size:28px">Training Modules</h1>
+    <p class="sec-sub" style="font-size:15px">Each module has three parts: Theory → Lab → Quiz. Pass the quiz (75%) to complete the module. Your progress is saved in this browser.</p>
+  </div>
+
+  <section class="ml-path" aria-labelledby="ml-path-title">
+    <h2 id="ml-path-title"><i class="ti ti-flag"></i> Start here</h2>
+    <p>New to cybersecurity? Follow these steps in order — each one builds on the previous.</p>
+    <ol class="ml-steps" id="ml-steps"></ol>
+  </section>
+
+  <div class="ml-filters" role="group" aria-label="Filter modules">
+    <span class="lbl">Level</span>
+    <button class="ml-chip active" data-filter="level" data-value="" aria-pressed="true" onclick="setModFilter(this)">All</button>
+    <button class="ml-chip" data-filter="level" data-value="Beginner" aria-pressed="false" onclick="setModFilter(this)">Beginner</button>
+    <button class="ml-chip" data-filter="level" data-value="Intermediate" aria-pressed="false" onclick="setModFilter(this)">Intermediate</button>
+    <button class="ml-chip" data-filter="level" data-value="Advanced" aria-pressed="false" onclick="setModFilter(this)">Advanced</button>
+    <span class="ml-sep" aria-hidden="true"></span>
+    <span class="lbl">Status</span>
+    <button class="ml-chip active" data-filter="status" data-value="" aria-pressed="true" onclick="setModFilter(this)">All</button>
+    <button class="ml-chip" data-filter="status" data-value="todo" aria-pressed="false" onclick="setModFilter(this)">To do</button>
+    <button class="ml-chip" data-filter="status" data-value="done" aria-pressed="false" onclick="setModFilter(this)">Completed</button>
+  </div>
+  <div class="mod-grid" id="all-grid"></div>
+</div>
+</div>
+
+<!-- CAREER MAP (mind map of security domains) -->
+<div id="view-careermap" class="view">
   <style>
     #mindmap-wrap{background:#060c18;min-height:calc(100vh - 64px);display:flex;flex-direction:column}
     #mindmap-header{display:flex;align-items:center;justify-content:space-between;padding:14px 28px;border-bottom:1px solid rgba(34,197,94,0.12);background:rgba(6,12,24,0.97);flex-wrap:wrap;gap:10px}
@@ -7242,7 +7308,7 @@ const MODULES=[
     theory:`<div class="theory-block"><h4><i class="ti ti-alert-triangle" style="color:#f97316"></i> What is incident response?</h4><p>IR is the structured process your team follows when a security incident occurs. A well-practiced plan reduces dwell time, limits damage, preserves forensic evidence, and satisfies legal obligations.</p><div class="info-box">ilyascybersecurity.com uses the NIST SP 800-61 4-phase model: Detection → Analysis → Containment → Remediation — industry-standard across public and private sectors.</div></div><div class="theory-block"><h4><i class="ti ti-map"></i> MITRE ATT&CK in IR</h4><p>Mapping observations to ATT&CK techniques lets you predict the attacker's next move and close gaps proactively. Each technique has documented detection opportunities and mitigations.</p><div style="display:flex;flex-wrap:wrap;gap:6px;margin-top:8px"><span class="mtag">T1190 — Exploit public app</span><span class="mtag">T1003 — Cred dump</span><span class="mtag">T1021.002 — SMB lateral</span><span class="mtag">T1071.001 — Web C2</span><span class="mtag">T1567.002 — Cloud exfil</span></div></div><div class="theory-block"><h4><i class="ti ti-file-certificate"></i> Legal obligations</h4><p>Know your breach reporting deadlines: PIPEDA (Canada), Loi 25 (Quebec), GDPR (Europe), HIPAA (US). Most require notification within 72 hours of confirmation.</p></div>`,
     lab:`<div class="lab-step"><div class="step-num" style="background:rgba(249,115,22,0.1);color:#f97316">1</div><div class="sbody"><h4>Phase 1 — Detection</h4><p>SIEM correlation fires: 5 failed logins → successful login under 10 min from same IP.</p><div class="cmd">Alert: "Credential_Stuffing_Detected" — 03:42 UTC<br>Source: 185.220.x.x<span class="c"> # Known threat infrastructure</span></div></div></div><div class="lab-step"><div class="step-num" style="background:rgba(249,115,22,0.1);color:#f97316">2</div><div class="sbody"><h4>Phase 2 — Analysis</h4><p>Wireshark captures SMB/RDP lateral movement. Nessus identifies exploit entry point (CVSS 10.0). Forensic timeline built.</p></div></div><div class="lab-step"><div class="step-num" style="background:rgba(249,115,22,0.1);color:#f97316">3</div><div class="sbody"><h4>Phase 3 — Containment</h4><div class="cmd">FortiGate: config firewall policy<br>edit [Emergency_Block_Rule]<br>set action deny<span class="c"> # Isolate affected VLAN</span></div></div></div><div class="lab-step"><div class="step-num" style="background:rgba(249,115,22,0.1);color:#f97316">4</div><div class="sbody"><h4>Phase 4 — Remediation</h4><p>Deploy critical patch within 48h. OpenVAS validation confirms clean state. SIEM rules updated with new TTPs.</p></div></div><div class="lab-step"><div class="step-num" style="background:rgba(249,115,22,0.1);color:#f97316">5</div><div class="sbody"><h4>Regulatory notification</h4><p>Assess if personal data was exfiltrated. If yes — notify applicable authority within required timeframe. Document everything.</p></div></div>`,
     quiz:[{q:'The 4-phase IR model aligns with:',opts:['NIST CSF','NIST SP 800-53','NIST SP 800-61','NIST SP 800-171'],ans:2},{q:'PIPEDA / Loi 25 breach reporting deadline:',opts:['30 days','7 days','72 hours','Immediately'],ans:2},{q:'SMB lateral movement maps to:',opts:['T1190','T1567.002','T1021.002 — Remote Services SMB','T1003'],ans:2},{q:'First step after containment:',opts:['Write post-mortem','Deploy patch for exploited vulnerability','Notify media','Reset all passwords'],ans:1}]},
-  {id:'fortigate-advanced',title:'FortiGate — Next-gen firewall',color:'#ef4444',icon:'ti-wall',level:'Intermediate',pills:[{t:'NGFW',c:'rgba(239,68,68,0.1)',tc:'#ef4444'},{t:'IPS',c:'rgba(239,68,68,0.1)',tc:'#ef4444'},{t:'Segmentation',c:'rgba(239,68,68,0.1)',tc:'#ef4444'}],desc:'Master zone-based network segmentation, IPS rules, and deny-all policies on the industry-leading NGFW.',
+  {id:'fortigate-advanced',title:'FortiGate Advanced — IPS & Security Fabric',color:'#ef4444',icon:'ti-wall',level:'Intermediate',pills:[{t:'NGFW',c:'rgba(239,68,68,0.1)',tc:'#ef4444'},{t:'IPS',c:'rgba(239,68,68,0.1)',tc:'#ef4444'},{t:'Segmentation',c:'rgba(239,68,68,0.1)',tc:'#ef4444'}],desc:'Master zone-based network segmentation, IPS rules, and deny-all policies on the industry-leading NGFW.',
     theory:`<div class="theory-block"><h4><i class="ti ti-wall" style="color:#ef4444"></i> What is FortiGate?</h4><p>FortiGate is Fortinet's Next-Generation Firewall — the #1 most deployed NGFW worldwide. It goes beyond traditional port/IP filtering by adding Deep Packet Inspection (DPI), Layer 7 application control, and an integrated Intrusion Prevention System (IPS).</p><div class="info-box">FortiGate understands <em>what</em> traffic is, not just where it goes. It can identify and block specific applications, malware signatures, and attack patterns in real time — even inside encrypted HTTPS sessions with SSL inspection.</div></div><div class="theory-block"><h4><i class="ti ti-layout-distribute-vertical"></i> Zone-based segmentation</h4><p>Divide your environment into isolated security zones: Internet, DMZ, LAN Corporate, LAN Restricted, Management. By default, all inter-zone traffic is denied — only explicitly created policies allow communication.</p><div class="info-box">Example policy: src=LAN_Corp → dst=DMZ_Web → service=HTTPS(443) → action=ACCEPT+LOG. Every other path remains blocked — this is the principle of least privilege applied at the network level.</div></div><div class="theory-block"><h4><i class="ti ti-shield-check"></i> IPS — Intrusion Prevention System</h4><p>FortiGate's IPS engine uses 15,000+ signatures updated daily by FortiGuard Labs. In Block mode, it drops malicious packets before they reach your servers. Switch all internet-facing policies from Monitor to Block.</p></div><div class="theory-block"><h4><i class="ti ti-topology-star"></i> Fortinet Security Fabric</h4><p>FortiGate integrates natively with FortiAnalyzer (log management), FortiManager (centralized config), and Splunk via Adaptive Response. When Splunk detects a threat pattern, FortiGate automatically blocks the source IP — detection-to-block in seconds.</p></div>`,
     lab:`<div class="lab-step"><div class="step-num" style="background:rgba(239,68,68,0.1);color:#ef4444">1</div><div class="sbody"><h4>Access FortiGate admin console</h4><p>Connect to FortiGate via browser. Default management IP is 192.168.1.99 (or as configured in your lab).</p><div class="cmd">https://192.168.1.99<span class="c"> # Accept self-signed cert</span><br>Username: admin<br>Password: (blank or lab password)</div></div></div><div class="lab-step"><div class="step-num" style="background:rgba(239,68,68,0.1);color:#ef4444">2</div><div class="sbody"><h4>Create network zones</h4><p>Network → Interfaces → Create New → Zone. Create the following zones:</p><div class="cmd">Zones: DMZ | LAN_Corp | LAN_Restricted | Management<br>Assign physical interfaces to each zone</div></div></div><div class="lab-step"><div class="step-num" style="background:rgba(239,68,68,0.1);color:#ef4444">3</div><div class="sbody"><h4>Verify deny-all default</h4><p>Policy & Objects → Firewall Policy. Confirm the implicit deny rule at the bottom of every zone pair. Test: ping between zones — should fail with no explicit policy.</p></div></div><div class="lab-step"><div class="step-num" style="background:rgba(239,68,68,0.1);color:#ef4444">4</div><div class="sbody"><h4>Create an explicit allow policy</h4><div class="cmd">Policy & Objects → Firewall Policy → Create New<br>Incoming: LAN_Corp → Outgoing: DMZ<br>Service: HTTPS (443)<br>Action: ACCEPT<br>Log: All Sessions ✓</div></div></div><div class="lab-step"><div class="step-num" style="background:rgba(239,68,68,0.1);color:#ef4444">5</div><div class="sbody"><h4>Enable IPS in Block mode</h4><p>Edit your internet-facing policy → Security Profiles → IPS → Select profile → Change mode from Monitor to <strong>Block</strong>. Apply to all WAN-facing policies.</p></div></div><div class="lab-step"><div class="step-num" style="background:rgba(239,68,68,0.1);color:#ef4444">6</div><div class="sbody"><h4>Verify logs in FortiGate</h4><div class="cmd">Log & Report → Forward Traffic<br>Filter: Action = deny<span class="c"> # Review blocked inter-zone attempts</span><br>Filter: Action = accept<span class="c"> # Review allowed sessions</span></div></div></div>`,
     quiz:[{q:'What does DPI stand for?',opts:['Data Protection Index','Deep Packet Inspection','Digital Policy Integration','Distributed Protocol Inspector'],ans:1},{q:'Deny-all default policy means:',opts:['All traffic is allowed unless explicitly blocked','Nothing is allowed — only explicitly permitted traffic passes','Only outbound traffic is blocked','Internal zones communicate freely by default'],ans:1},{q:'Why enable IPS in Block mode (not Monitor)?',opts:['Monitor mode uses less CPU','Block mode actively drops malicious packets; monitor only alerts','Block mode is faster for HTTPS','Monitor mode is required for SSL inspection'],ans:1},{q:'Fortinet Security Fabric integrates FortiGate with:',opts:['Splunk only','FortiAnalyzer, FortiManager, and Splunk for unified security operations','Nessus and OpenVAS only','Windows Defender only'],ans:1}]},
@@ -7564,6 +7630,60 @@ function renderCards(id){
     </div>`).join('');
 }
 
+// Recommended order for a new student: lab setup first, then modules from beginner to advanced
+const LEARNING_PATH=[
+  {view:'installation',title:'Set up your lab',sub:'VMware + Kali + target VMs'},
+  {mod:'nessus'},{mod:'wireshark'},{mod:'openvas'},
+  {mod:'splunk'},{mod:'fortigate'},{mod:'wazuh'},
+  {mod:'incident'}
+];
+const LEVEL_ORDER={Beginner:0,Intermediate:1,Advanced:2};
+const modFilter={level:'',status:''};
+
+function renderLearningPath(){
+  const ol=document.getElementById('ml-steps');if(!ol)return;
+  ol.innerHTML=LEARNING_PATH.map(s=>{
+    const m=s.mod&&MODULES.find(x=>x.id===s.mod);
+    const title=m?m.title.split(' — ')[0]:s.title;
+    const sub=m?m.level:s.sub;
+    const isDone=m?done.has(m.id):false;
+    const action=m?`openLesson('${m.id}')`:`showView('${s.view}')`;
+    return `<li class="ml-step${isDone?' done':''}"><button onclick="${action}"><span class="ml-step-top">${sub}${isDone?' · completed':''}</span><span class="ml-step-title">${title}</span></button></li>`;
+  }).join('');
+}
+function setModFilter(btn){
+  const f=btn.dataset.filter;modFilter[f]=btn.dataset.value;
+  document.querySelectorAll(`.ml-chip[data-filter="${f}"]`).forEach(b=>{b.classList.toggle('active',b===btn);b.setAttribute('aria-pressed',b===btn);});
+  renderModuleList();
+}
+function renderModuleList(){
+  const grid=document.getElementById('all-grid');if(!grid)return;
+  const list=MODULES
+    .filter(m=>!modFilter.level||m.level===modFilter.level)
+    .filter(m=>!modFilter.status||(modFilter.status==='done')===done.has(m.id))
+    .sort((a,b)=>LEVEL_ORDER[a.level]-LEVEL_ORDER[b.level]);
+  grid.innerHTML=list.length?list.map(m=>`
+    <div class="mod-card" onclick="openLesson('${m.id}')">
+      <div class="top-bar" style="background:${m.color}"></div>
+      <div class="icon-wrap" style="background:${m.color}18"><i class="ti ${m.icon}" style="color:${m.color}"></i></div>
+      <span class="ml-level ${m.level}">${m.level}</span>
+      <h3>${m.title}</h3><p>${m.desc}</p>
+      <div class="pills">${m.pills.map(p=>`<span class="pill" style="background:${p.c};color:${p.tc}">${p.t}</span>`).join('')}</div>
+      <div class="prog-bar"><div class="prog-fill" style="width:${done.has(m.id)?100:0}%;background:${m.color}"></div></div>
+      <button class="start-btn"><i class="ti ti-player-play"></i> ${done.has(m.id)?'Review module':'Start module'}</button>
+    </div>`).join(''):'<p class="ml-empty">No module matches these filters.</p>';
+}
+function refreshModuleViews(){
+  renderCards('home-grid');renderModuleList();renderLearningPath();
+}
+// Home page numbers come from the data so they never drift from the real content
+function updateSiteStats(){
+  const set=(id,v)=>{const e=document.getElementById(id);if(e)e.textContent=v;};
+  set('stat-modules',MODULES.length);
+  set('stat-guides',document.querySelectorAll('.inst-guide-card').length);
+  set('stat-questions',MODULES.reduce((n,m)=>n+m.quiz.length,0));
+}
+
 function openLesson(id){
   const mod=MODULES.find(m=>m.id===id);
   if(!mod)return;
@@ -7612,7 +7732,7 @@ function submit(id){
   const pct=Math.round((s/m.quiz.length)*100);
   const r=document.getElementById(`qr-${id}`);r.style.display='block';
   r.innerHTML=`<div class="score">${pct}%</div><p>${s} / ${m.quiz.length} correct &nbsp;—&nbsp; ${pct>=75?'Excellent! Module completed ✓':'Review theory and try again.'}</p>`;
-  if(pct>=75){done.add(id);scores.push(pct);saveProgress();updateProg();renderCards('home-grid');if(document.getElementById('all-grid'))renderCards('all-grid');}
+  if(pct>=75){done.add(id);scores.push(pct);saveProgress();updateProg();refreshModuleViews();}
 }
 
 function updateProg(){
@@ -7693,7 +7813,7 @@ function filterGloss(){
   if(c)c.textContent=shown?`${shown} term${shown>1?'s':''}`:'No term found. Try another word, or clear the search.';
 }
 
-document.addEventListener('DOMContentLoaded',function(){renderCards('home-grid');if(document.getElementById('all-grid'))renderCards('all-grid');buildGloss();updateProg();});
+document.addEventListener('DOMContentLoaded',function(){refreshModuleViews();buildGloss();updateProg();updateSiteStats();});
 setInterval(updateProg,30000);
 
 // ── LAB MODAL DATA ──────────────────────────────────────────────
